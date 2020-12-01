@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 export class LoginComponent implements OnInit {
   logInForm: FormGroup;
 
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth) { }
+  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router) { }
 
   ngOnInit(): void {
     this.logInForm = this.fb.group({
@@ -21,17 +22,11 @@ export class LoginComponent implements OnInit {
 
   logIn() {
     if (this.logInForm.valid) {
-      console.log(this.logInForm.value.email);
-      this.storeCredentials(this.logInForm.value.email, this.logInForm.value.password);
-      this.auth.signInWithEmailAndPassword(this.logInForm.value.email, this.logInForm.value.password).then(() => {
-        console.log("Hey bro you're in");
-      })
+      let user = this.auth.signInWithEmailAndPassword(this.logInForm.value.email, this.logInForm.value.password);
+      localStorage.setItem('email', this.logInForm.value.email);
+      this.router.navigate(['/home']);
     } else {
       
     }
-  }
-
-  private storeCredentials(email: string, password: string) {
-    // TODO: remember user's session
   }
 }
