@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "attendance-register-51f49": {
+      "hosting": {
+        "attendanceRegister": [
+          "attendance-register-51f49"
+        ]
+      }
+    }
+  }
+}
