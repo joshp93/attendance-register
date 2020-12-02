@@ -1,0 +1,45 @@
+.navbar {
+    display: flex;
+    height: 70px;
+    background-color: lightgoldenrodyellow;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+textarea:focus, input:focus{
+    outline: none;
+}
+
+.navbar div:last-child {
+    margin-left: auto;
+}
+
+.navbar img:hover {
+    cursor: pointer;
+}
+
+.menuItem {
+    height: 70px;
+    line-height: 50px;
+    padding: 10px;
+    font-size: 20px;
+}
+.menuItem:hover {
+    font-weight: bolder;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 5%);
+}
+
+.logIn {
+    height: 70px;
+    line-height: 50px;
+    padding: 10px;
+    font-size: 20px;
+}
+
+.title {
+    height: 70px;
+    line-height: 50px;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}

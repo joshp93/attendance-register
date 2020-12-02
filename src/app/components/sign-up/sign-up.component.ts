@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { UserSession } from 'src/app/modules/user-session/user-session.module';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,7 +12,7 @@ import { UserSession } from 'src/app/modules/user-session/user-session.module';
 export class SignUpComponent implements OnInit {
   signUpForm: FormGroup;
 
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth) { }
+  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router) { }
 
   ngOnInit(): void {
     this.signUpForm = this.fb.group({
@@ -27,9 +28,14 @@ export class SignUpComponent implements OnInit {
       return;
     }
     if (this.signUpForm.valid) {
-      this.auth.createUserWithEmailAndPassword(this.signUpForm.value.email, this.signUpForm.value.password1).then((user) => {
+      this.auth.createUserWithEmailAndPassword(this.signUpForm.value.email, this.signUpForm.value.password1)
+      .then((res) => {
         let userSession = new UserSession();
-        userSession.storeUserInfo(user.user.email);
+        this.auth.signInWithEmailAndPassword(res.user.email, this.signUpForm.value.password1)
+        .then((res) => {
+          userSession.storeUserInfo(res.user);
+          this.router.navigate(['/home']);
+        });
       });
     }
   }

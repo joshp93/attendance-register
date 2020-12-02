@@ -1,0 +1,9 @@
+<div class="navbar">
+    <ng-container *ngIf="user$ | async as user; else elseTemplate">
+        <div class="menuItem" (click)="logOut()">{{ user.email }}</div>
+    </ng-container>
+    <ng-template #elseTemplate>
+        <div class="logIn">Login</div>
+    </ng-template>
+    <div class="title">Attendance Register</div>
+</div>
