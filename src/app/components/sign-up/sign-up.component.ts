@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AngularFireAuth } from "@angular/fire/auth";
 import { UserSession } from 'src/app/modules/user-session/user-session.module';
 import { Router } from '@angular/router';
+import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
 
 @Component({
   selector: 'app-sign-up',
@@ -12,31 +13,32 @@ import { Router } from '@angular/router';
 export class SignUpComponent implements OnInit {
   signUpForm: FormGroup;
 
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router) { }
+  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService) { }
 
   ngOnInit(): void {
     this.signUpForm = this.fb.group({
-      email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-      password1: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      password2: new FormControl('', [Validators.required, Validators.minLength(6)])
-    }); //TODO Work out how to feedback validators to the end user
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, this.customValidation.patternValidator()]),
+      confirmPassword: new FormControl('', Validators.required)
+    },
+    {
+      validators: this.customValidation.matchPassword('password', 'confirmPassword')
+    }); 
   }
 
   createUser() {
-    if (this.signUpForm.value.password1 !== this.signUpForm.value.password2) {
-      alert("passwords don't match"); //TODO Add proper validaion
-      return;
-    }
     if (this.signUpForm.valid) {
-      this.auth.createUserWithEmailAndPassword(this.signUpForm.value.email, this.signUpForm.value.password1)
+      this.auth.createUserWithEmailAndPassword(this.signUpForm.value.email, this.signUpForm.value.password)
       .then((res) => {
         let userSession = new UserSession();
-        this.auth.signInWithEmailAndPassword(res.user.email, this.signUpForm.value.password1)
+        this.auth.signInWithEmailAndPassword(res.user.email, this.signUpForm.value.password)
         .then((res) => {
-          userSession.storeUserInfo(res.user);
+          userSession.setStoredUserInfo(res.user);
           this.router.navigate(['/home']);
         });
       });
+    } else {
+      alert(this.signUpForm.errors)
     }
   }
 

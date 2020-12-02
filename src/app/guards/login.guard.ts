@@ -11,23 +11,24 @@ import firebase from "firebase/app";
 
 export class LoginGuard implements CanActivate {
 
-  constructor(private router: Router, private auth: AngularFireAuth) { }
+  constructor(private router: Router, private auth: AngularFireAuth, private userSession: UserSession) { }
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean | Promise<boolean> {
-    let userSession = new UserSession();
-    let storedInfo = userSession.getStoredUserInfo();
+    let storedInfo = this.userSession.getStoredUserInfo();
     if (storedInfo.email && storedInfo.uid) {
       return new Promise<boolean>((resolve, reject) => {
         this.auth.currentUser
         .then((res) => {
-          if (storedInfo.uid == res.uid) {
+          if (!res) {
+            reject(this.redirectToLogin());
+          } else if (storedInfo.uid == res.uid) {
             resolve(true);
           } else {
             reject(this.redirectToLogin());
           }
         })
-        .catch(() => {
+        .catch((res) => {
           reject(this.redirectToLogin());
         });
       });
@@ -37,6 +38,7 @@ export class LoginGuard implements CanActivate {
   }
 
   redirectToLogin(): boolean {
+    this.userSession.clearStoredUserInfo();
     this.router.navigate(['/login']);
     return false;
   }

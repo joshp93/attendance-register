@@ -12,6 +12,8 @@ import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { environment } from 'src/environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { CustomValidationService } from './modules/custom-validation-service/custom-validation-service.module';
+import { UserSession } from './modules/user-session/user-session.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,10 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     AngularFireAuthModule,
     AngularFirestoreModule
   ],
-  providers: [],
+  providers: [
+    CustomValidationService,
+    UserSession
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

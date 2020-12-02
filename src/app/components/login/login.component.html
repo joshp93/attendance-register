@@ -1,8 +1,10 @@
-<form [formGroup]="logInForm">
-    <label for="email">Email</label>
-    <input id="email" name="email" type="email" formControlName="email">
-    <label for="password">Password</label>
-    <input if="password" name="password" type="password" formControlName="password">
-    <button type="submit" (click)="logIn()">Login</button>
-    <a routerLink="signup" >Create an account</a>
-</form>
+<div class="wrapper">
+    <form [formGroup]="logInForm">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" formControlName="email">
+        <label for="password">Password</label>
+        <input if="password" name="password" type="password" formControlName="password">
+        <button type="submit" (click)="logIn()" [disabled]="buttonDisabled">{{ logInText }}</button>
+        <!-- <a routerLink="signup">Create an account</a> -->
+    </form>
+</div>

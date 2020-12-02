@@ -2,6 +2,34 @@ form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 80%;
-    padding-left: 10%;
+}
+.wrapper {
+    width: 60%;
+    margin-left: 20%;
+    padding: 5px;
+    border-top: 1px solid rgba(211, 211, 211, 0.548);;
+    border-bottom: 1px solid rgba(211, 211, 211, 0.548);;
+    border-left: 1px solid rgba(211, 211, 211, 0.548);;
+    border-right: 1px solid rgba(211, 211, 211, 0.548);;
+    box-shadow: 2px 2px rgba(211, 211, 211, 0.548);
+    background-color: white;
+}
+
+form input {
+    margin-bottom: 10px;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+form input:focus {
+    border-bottom: 2px solid black;
+}
+
+form button {
+    border: none;
+    background-color: lightskyblue;
+    height: 30px;
+    width: 80px;
+    align-self: flex-end;
+    box-shadow: 2px 2px rgba(211, 211, 211, 0.548);
 }

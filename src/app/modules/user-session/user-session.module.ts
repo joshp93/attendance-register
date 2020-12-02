@@ -13,7 +13,7 @@ export class UserSession {
   
   constructor() { }
   
-  storeUserInfo(user: firebase.User) {
+  setStoredUserInfo(user: firebase.User) {
     localStorage.setItem('email', user.email);
     localStorage.setItem('uid', user.uid);
   }
@@ -23,5 +23,9 @@ export class UserSession {
       email: localStorage.getItem('email'),
       uid: localStorage.getItem('uid')
     }
+  }
+
+  clearStoredUserInfo() {
+    localStorage.clear();
   }
 }

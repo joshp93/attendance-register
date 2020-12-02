@@ -12,4 +12,8 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  newRegister() {
+    alert("what the hell are you doing!");
+  }
+
 }
