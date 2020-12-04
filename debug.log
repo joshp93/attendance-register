@@ -3,3 +3,6 @@
 [1202/200608.361:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1202/202159.946:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1202/203536.558:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1203/131015.156:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1204/130014.274:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1204/130014.277:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\joshua.pearson\AppData\Local\Google\Chrome\User Data\Crashpad\attachments\6b4756f5-b528-464d-90d0-3680fd50c87b: The system cannot find the path specified. (0x3)

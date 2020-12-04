@@ -14,26 +14,38 @@ export class LoginGuard implements CanActivate {
   constructor(private router: Router, private auth: AngularFireAuth, private userSession: UserSession) { }
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): boolean | Promise<boolean> {
+    state: RouterStateSnapshot): Promise<boolean> {
     let storedInfo = this.userSession.getStoredUserInfo();
     if (storedInfo.email && storedInfo.uid) {
+
       return new Promise<boolean>((resolve, reject) => {
-        this.auth.currentUser
-        .then((res) => {
-          if (!res) {
-            reject(this.redirectToLogin());
-          } else if (storedInfo.uid == res.uid) {
+        this.getCurrentUser()
+          .then((res) => {
+            this.userSession.setStoredUserInfo(res);
             resolve(true);
-          } else {
+            console.log("first resolve");
+          })
+          .catch((res) => {
             reject(this.redirectToLogin());
-          }
-        })
-        .catch((res) => {
-          reject(this.redirectToLogin());
-        });
+            console.log("first reject");
+          });
       });
+
     } else {
-      return this.redirectToLogin();
+
+      return new Promise<boolean>((resolve, reject) => {
+        this.getCurrentUser()
+          .then((res) => {
+            this.userSession.setStoredUserInfo(res);
+            resolve(true);
+            console.log("second resolve");
+          })
+          .catch((res) => {
+            reject(this.redirectToLogin());
+            console.log("second reject");
+          });
+      });
+
     }
   }
 
@@ -41,5 +53,21 @@ export class LoginGuard implements CanActivate {
     this.userSession.clearStoredUserInfo();
     this.router.navigate(['/login']);
     return false;
+
+  }
+  getCurrentUser(): Promise<firebase.User> {
+    return new Promise<firebase.User>((resolve, reject) => {
+      this.auth.currentUser
+        .then((res) => {
+          if (!res) {
+            reject(res);
+          } else {
+            resolve(res);
+          }
+        })
+        .catch((res) => {
+          reject(res);
+        });
+    });
   }
 }

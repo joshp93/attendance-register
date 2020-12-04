@@ -1,38 +1,46 @@
 .navbar {
     display: flex;
-    height: 90px;
+    height: 150px;
     background-color: rgba(135, 206, 250, 0.8);
+    background-image: url('../../../assets/chairs.jpg');
     justify-content: flex-start;
     box-shadow: 2px 2px rgba(211, 211, 211, 0.548);
+    align-items: flex-end;
 }
 textarea:focus, input:focus{
     outline: none;
 }
 
-.navbar div:last-child {
-    margin-left: auto;
-}
+// .navbar div:last-child {
+// }
 
 .navbar img:hover {
     cursor: pointer;
 }
 
 .menuItem {
-    height: 70px;
-    line-height: 70px;
+    height: 50px;
     padding: 10px;
+    background-color: rgba(255, 239, 213, 0.8);
+    // border-top-right-radius: 50%;
 }
 .menuItem:hover {
-    font-weight: bolder;
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 5%);
+    background-color: rgba(255, 239, 213, 0.9);
+    text-decoration: underline;
 }
 
 .title {
-    height: 70px;
-    line-height: 70px;
-    padding: 10px;
+    height: 120px;
+    margin-left: auto;
+    padding-right: 0.5%;
+    padding-left: 1%;
+    padding-top: 30px;
     font-weight: bold;
+    text-align: right;
+    font-size: 40px;
+    background-color: papayawhip;
+    border-top-left-radius: 50%;
 }
 .spacer {
     width: 100%;
