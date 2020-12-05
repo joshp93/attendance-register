@@ -1,19 +1,35 @@
-/* You can add global styles to this file, and also import other style files */
-* {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 20px;
-}
+html,
 body {
-    margin: 0px;
+    height: 100%;
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     border: 0px;
     min-height: 100%;
-    background-image: url(./assets/ALS.png);
+    background-image: url(./assets/chairs.jpg);
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-color: papayawhip;
 }
 
-input:focus{
+input:focus {
     outline: none;
+}
+
+.flexForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.formWrapper {
+    width: 60%;
+    margin-left: 20%;
+    padding: 5px;
+    background-color: rgba(211, 211, 211, 0.9);
+    border-radius: 5px;
+}
+
+.flexForm button {
+    width: 80px;
+    align-self: flex-end;
 }

@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService) { }
   
   ngOnInit(): void {
-    this.logInText = "Login";
+    this.setLoadingState(false);
     this.logInForm = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required)
@@ -33,16 +33,16 @@ export class LoginComponent implements OnInit {
       this.auth.signInWithEmailAndPassword(this.logInForm.value.email, this.logInForm.value.password).then((res) => {
         let userSession = new UserSession();
         userSession.setStoredUserInfo(res.user);
-        this.buttonDisabled = false;
+        this.setLoadingState(false);
         this.router.navigate(['/home']);
       })
       .catch((res) => {
         alert(res.message);
-        this.buttonDisabled = false;
+        this.setLoadingState(false);
       });
     } else {
       alert("Please fill out all information");
-      this.buttonDisabled = false;
+      this.setLoadingState(false);
     }
   }
 

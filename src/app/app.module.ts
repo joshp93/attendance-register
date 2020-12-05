@@ -14,6 +14,12 @@ import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CustomValidationService } from './modules/custom-validation-service/custom-validation-service.module';
 import { UserSession } from './modules/user-session/user-session.module';
+import { NewRegisterComponent } from './components/home/new-register/new-register.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 
 @NgModule({
   declarations: [
@@ -21,7 +27,8 @@ import { UserSession } from './modules/user-session/user-session.module';
     LoginComponent,
     SignUpComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    NewRegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +36,12 @@ import { UserSession } from './modules/user-session/user-session.module';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule
   ],
   providers: [
     CustomValidationService,

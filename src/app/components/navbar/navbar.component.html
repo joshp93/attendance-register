@@ -1,11 +1,14 @@
 <div class="navbar">
     <ng-container *ngIf="user$ | async as user; else elseTemplate">
-        <div class="menuItem" (click)="logOut()">{{ user.email }}</div>
+        <div class="menuItem" (click)="logOut()">Shalom!<br>{{ user.email }}</div>
     </ng-container>
     <ng-template #elseTemplate>
+        <p class="login">Please Log in...</p>
     </ng-template>
     <div class="title">
-        Attendance<br>Register
+        <img src="../../../assets/ALS.png" alt="ALS Logo">
+        <br>
+        ATTENDANCE REGISTER
     </div>
 </div>
 <div class="spacer"></div>

@@ -23,11 +23,11 @@ export class LoginGuard implements CanActivate {
           .then((res) => {
             this.userSession.setStoredUserInfo(res);
             resolve(true);
-            console.log("first resolve");
+            console.log("User info stored, able to get current user.");
           })
           .catch((res) => {
             reject(this.redirectToLogin());
-            console.log("first reject");
+            console.log("User Info storeed, but unable to get current user: " + res);
           });
       });
 
@@ -38,11 +38,11 @@ export class LoginGuard implements CanActivate {
           .then((res) => {
             this.userSession.setStoredUserInfo(res);
             resolve(true);
-            console.log("second resolve");
+            console.log("User info was not stored, but able to get user. User info has now been stored.");
           })
           .catch((res) => {
             reject(this.redirectToLogin());
-            console.log("second reject");
+            console.log("User info was not stored, unable to get current user: " + res);
           });
       });
 

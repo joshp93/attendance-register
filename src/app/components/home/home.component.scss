@@ -2,7 +2,6 @@
     width: 60%;
     margin-left: 20%;
     padding: 5px;
-    background-color: white;
     display: flex;
     flex-direction: row;
 }
@@ -10,7 +9,6 @@
 .action {
     height: 150px;
     width: 200px;
-    box-shadow: 2px 2px rgba(211, 211, 211, 0.548);
     background-image: url("../../../assets/Pens.jpg");
     background-size: 100% 100%;
     border-radius: 5%;
@@ -19,5 +17,6 @@
 }
 
 .action:hover {
-    box-shadow: 4px 4px rgba(211, 211, 211, 0.548);
+    cursor: pointer;
+    text-decoration: underline;
 }
