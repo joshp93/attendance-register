@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from "firebase/app";
+import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
 
 @NgModule({
   declarations: [],
@@ -10,9 +11,10 @@ import firebase from "firebase/app";
   ]
 })
 export class UserSession {
-  
-  constructor() { }
-  
+
+  constructor() {
+  }
+
   setStoredUserInfo(user: firebase.User) {
     localStorage.setItem('email', user.email);
     localStorage.setItem('uid', user.uid);

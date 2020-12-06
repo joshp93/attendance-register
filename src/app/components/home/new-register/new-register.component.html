@@ -1,15 +1,16 @@
 <div class="formWrapper">
     <form class="flexForm" [formGroup]="registerForm">
         <mat-form-field appearance="standard">
-            <mat-label>Email</mat-label>
-            <input matInput id="event" name="event" type="text" formControlName="event">
+            <mat-label>Event</mat-label>
+            <input matInput name="event" type="text" formControlName="event">
         </mat-form-field>
         <mat-form-field appearance="fill">
-            <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker">
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+        <input name="picture" type="file" formControlName="picture" (change)="onFileSelected($event)">
         <button mat-raised-button color="primary" (click)="submit()" [disabled]="buttonDisabled">{{ submitText }}</button>
     </form>
 </div>

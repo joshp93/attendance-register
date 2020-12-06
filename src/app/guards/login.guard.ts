@@ -21,8 +21,7 @@ export class LoginGuard implements CanActivate {
       return new Promise<boolean>((resolve, reject) => {
         this.getCurrentUser()
           .then((res) => {
-            this.userSession.setStoredUserInfo(res);
-            resolve(true);
+            resolve(this.storeUserInfoAndResolve(res));
             console.log("User info stored, able to get current user.");
           })
           .catch((res) => {
@@ -36,8 +35,7 @@ export class LoginGuard implements CanActivate {
       return new Promise<boolean>((resolve, reject) => {
         this.getCurrentUser()
           .then((res) => {
-            this.userSession.setStoredUserInfo(res);
-            resolve(true);
+            resolve(this.storeUserInfoAndResolve(res));
             console.log("User info was not stored, but able to get user. User info has now been stored.");
           })
           .catch((res) => {
@@ -53,8 +51,13 @@ export class LoginGuard implements CanActivate {
     this.userSession.clearStoredUserInfo();
     this.router.navigate(['/login']);
     return false;
-
   }
+
+  storeUserInfoAndResolve(res): boolean {
+    this.userSession.setStoredUserInfo(res);
+    return true;
+  }
+
   getCurrentUser(): Promise<firebase.User> {
     return new Promise<firebase.User>((resolve, reject) => {
       this.auth.currentUser
