@@ -21,6 +21,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from '@angular/material/core';
+import { RegistersComponent } from './components/home/registers/registers.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     SignUpComponent,
     HomeComponent,
     NavbarComponent,
-    NewRegisterComponent
+    NewRegisterComponent,
+    RegistersComponent
   ],
   imports: [
     BrowserModule,

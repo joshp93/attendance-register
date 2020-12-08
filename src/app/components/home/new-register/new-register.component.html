@@ -1,15 +1,17 @@
 <div class="formWrapper">
     <form class="flexForm" [formGroup]="registerForm">
+        <div class="validationError" *ngIf="eventHasError">{{ eventError }}</div>
         <mat-form-field appearance="standard">
             <mat-label>Event</mat-label>
-            <input matInput name="event" type="text" formControlName="event">
+            <input matInput name="event" type="text" formControlName="event" (blur)="checkEventValid($event)">
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="date">
+            <input matInput [matDatepicker]="picker" formControlName="date" (blur)="checkDateValid($event)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+        <div class="validationError" *ngIf="dateHasError">{{ dateError }}</div>
         <input name="picture" type="file" formControlName="picture" (change)="onFileSelected($event)">
         <button mat-raised-button color="primary" (click)="submit()" [disabled]="buttonDisabled">{{ submitText }}</button>
     </form>

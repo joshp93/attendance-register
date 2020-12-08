@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
 import { UserSession } from 'src/app/modules/user-session/user-session.module';
-import { AngularFirestore } from "@angular/fire/firestore";
+import { AngularFirestore, CollectionReference, DocumentReference } from "@angular/fire/firestore";
 
 @Component({
   selector: 'app-new-register',
@@ -17,6 +17,10 @@ export class NewRegisterComponent implements OnInit {
   submitText: string;
   buttonDisabled: boolean;
   loading: boolean;
+  eventHasError: boolean;
+  eventError: string;
+  dateHasError: boolean;
+  dateError: string;
 
   constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore) { }
   private datePattern: RegExp;
@@ -26,30 +30,62 @@ export class NewRegisterComponent implements OnInit {
     this.setLoadingState(false);
     this.datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
     this.registerForm = this.fb.group({
-      event: new FormControl('', [Validators.required]),
-      date: new FormControl(new Date(), [Validators.pattern(this.datePattern)]),
+      event: new FormControl('', Validators.required),
+      date: new FormControl(new Date(), [Validators.required]), //Validators.pattern(this.datePattern)]),
       picture: new FormControl('')
     });
   }
 
+  checkEventValid(event) {
+    if (this.registerForm.get(event.target.name).errors) {
+      this.eventHasError = this.registerForm.get(event.target.name).errors.required;
+      this.eventHasError ? this.eventError = "Please enter an event name" : this.eventError = "";
+    } else {
+      this.eventHasError = false;
+    }
+  }
+  checkDateValid(event) {
+    console.log(this.registerForm.get("date"));
+    if (this.registerForm.get("date").errors) {
+      console.log(this.registerForm.get(event.target.name).errors);
+      if(this.registerForm.get(event.target.name).errors.required) {
+        this.dateHasError = true;
+        this.dateError = "Please enter a date";
+      } else if(this.registerForm.get(event.target.name).errors.required) {
+
+      } else {
+        this.dateHasError = false;
+        this.dateError = "";
+      }
+    } else {
+      this.dateHasError = false;
+    }
+  }
+  
   submit() {
     this.setLoadingState(true);
-    // TODO work out authentication to firestore
-    this.firestore.collection("register").doc(this.registerForm.value.event).set({
-      date: this.registerForm.value.date,
-      // picture: this.registerForm.value.picture
-    })
-    .then()
-    .catch((res) => {
-      alert(res);
-    })
-    .finally(() => {
-      this.setLoadingState(false)
-    });
     if (this.registerForm.valid) {
+      this.firestore.collection("registers").doc(this.firestore.createId()).set({
+        event: this.registerForm.value.event,
+        date: this.registerForm.value.date
+        // picture: this.registerForm.value.picture
+      })
+      .then(() => {
+        this.setLoadingState(false);
+        this.router.navigate(["home"]);
+      })
+      .catch((res) => {
+        alert(res);
+      })
+      .finally(() => {
+        this.setLoadingState(false)
+      });
     } else {
       this.setLoadingState(false);
-      alert("Please fill out all the information");
+      this.registerForm.errors.forEach(element => {
+        console.log(element);
+      });
+      alert(this.registerForm.errors);
     }
   }
 
