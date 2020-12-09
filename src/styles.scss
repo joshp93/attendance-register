@@ -33,3 +33,11 @@ input:focus {
     width: 80px;
     align-self: flex-end;
 }
+
+.validationError {
+    font-size: 10px;
+    color: red;
+}
+.validationError::before {
+    content: "*";
+}

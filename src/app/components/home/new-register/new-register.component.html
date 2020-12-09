@@ -3,16 +3,22 @@
         <div class="validationError" *ngIf="eventHasError">{{ eventError }}</div>
         <mat-form-field appearance="standard">
             <mat-label>Event</mat-label>
-            <input matInput name="event" type="text" formControlName="event" (blur)="checkEventValid($event)">
+            <input matInput name="event" type="text" formControlName="event" (blur)="checkValid($event)">
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <div class="validationError" *ngIf="dateHasError">{{ dateError }}</div>
+        <mat-form-field appearance="standard">
             <mat-label>Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="date" (blur)="checkDateValid($event)">
+            <input matInput name="date" [matDatepicker]="picker" formControlName="date" (blur)="checkValid($event)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <div class="validationError" *ngIf="dateHasError">{{ dateError }}</div>
         <input name="picture" type="file" formControlName="picture" (change)="onFileSelected($event)">
-        <button mat-raised-button color="primary" (click)="submit()" [disabled]="buttonDisabled">{{ submitText }}</button>
+        <div class="buttons">
+            <button mat-raised-button color="warn" (click)="cancel()"
+                [disabled]="buttonDisabled">Close</button>
+            <span></span>    
+            <button mat-raised-button color="primary" (click)="submit()"
+                [disabled]="buttonDisabled">{{ submitText }}</button>
+        </div>
     </form>
 </div>

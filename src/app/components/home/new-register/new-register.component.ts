@@ -36,6 +36,18 @@ export class NewRegisterComponent implements OnInit {
     });
   }
 
+  checkValid(event) {
+    switch(event.target.name) {
+      case "date": {
+        this.checkDateValid(event);
+        break;
+      } case "event": {
+        this.checkEventValid(event);
+        break;
+      }
+    }
+  }
+
   checkEventValid(event) {
     if (this.registerForm.get(event.target.name).errors) {
       this.eventHasError = this.registerForm.get(event.target.name).errors.required;
@@ -45,23 +57,29 @@ export class NewRegisterComponent implements OnInit {
     }
   }
   checkDateValid(event) {
-    console.log(this.registerForm.get("date"));
     if (this.registerForm.get("date").errors) {
       console.log(this.registerForm.get(event.target.name).errors);
-      if(this.registerForm.get(event.target.name).errors.required) {
+      if(this.registerForm.get(event.target.name).errors.matDatepickerParse) {
+        this.dateHasError = true;
+        this.dateError = `"${ this.registerForm.get(event.target.name).errors.matDatepickerParse.text }" is not a valid date`;
+      } else if(this.registerForm.get(event.target.name).errors.required) {
+        console.log(this.registerForm.get(event.target.name).errors.required);
         this.dateHasError = true;
         this.dateError = "Please enter a date";
-      } else if(this.registerForm.get(event.target.name).errors.required) {
-
       } else {
         this.dateHasError = false;
         this.dateError = "";
       }
     } else {
       this.dateHasError = false;
+      this.dateError = "";
     }
   }
-  
+  cancel() {
+    this.registerForm.reset();
+    this.router.navigate(["home"]);
+  }
+
   submit() {
     this.setLoadingState(true);
     if (this.registerForm.valid) {
@@ -70,15 +88,13 @@ export class NewRegisterComponent implements OnInit {
         date: this.registerForm.value.date
         // picture: this.registerForm.value.picture
       })
-      .then(() => {
-        this.setLoadingState(false);
-        this.router.navigate(["home"]);
-      })
+      .then()
       .catch((res) => {
         alert(res);
       })
       .finally(() => {
-        this.setLoadingState(false)
+        this.setLoadingState(false);
+        this.registerForm.reset();
       });
     } else {
       this.setLoadingState(false);

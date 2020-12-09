@@ -14,14 +14,18 @@ import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CustomValidationService } from './modules/custom-validation-service/custom-validation-service.module';
 import { UserSession } from './modules/user-session/user-session.module';
+import { RegistersComponent } from './components/home/registers/registers.component';
 import { NewRegisterComponent } from './components/home/new-register/new-register.component';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from '@angular/material/core';
-import { RegistersComponent } from './components/home/registers/registers.component';
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTableModule } from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -45,7 +49,10 @@ import { RegistersComponent } from './components/home/registers/registers.compon
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatTableModule
   ],
   providers: [
     CustomValidationService,

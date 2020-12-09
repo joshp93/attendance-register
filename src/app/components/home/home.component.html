@@ -1,7 +1,10 @@
 <div class="wrapper">
-    <div class="tooltip">
+    <!-- <div class="tooltip">
         <img src="../../../assets/add.png" alt="New Register" class="new" (click)="newRegister()">
         <span class="tootipText">New Register</span>
-    </div>
+    </div> -->
+    <button mat-mini-fab color="primary" matTooltip="New Register" matTooltipPosition="above" (click)="newRegister()">
+        <mat-icon>create</mat-icon>
+    </button>
     <app-registers></app-registers>
 </div>
