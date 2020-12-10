@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
 import { UserSession } from 'src/app/modules/user-session/user-session.module';
 import { AngularFirestore, CollectionReference, DocumentReference } from "@angular/fire/firestore";
+import { Key } from 'protractor';
 
 @Component({
   selector: 'app-new-register',
@@ -12,7 +13,7 @@ import { AngularFirestore, CollectionReference, DocumentReference } from "@angul
   styleUrls: ['./new-register.component.scss']
 })
 export class NewRegisterComponent implements OnInit {
-  registerForm: FormGroup;
+  inputForm: FormGroup;
   required: string;
   submitText: string;
   buttonDisabled: boolean;
@@ -25,83 +26,63 @@ export class NewRegisterComponent implements OnInit {
   constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore) { }
   private datePattern: RegExp;
   private selectedFile = null;
+  errors: Map<string, string>;
 
   ngOnInit(): void {
     this.setLoadingState(false);
     this.datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
-    this.registerForm = this.fb.group({
+    this.inputForm = this.fb.group({
       event: new FormControl('', Validators.required),
       date: new FormControl(new Date(), [Validators.required]), //Validators.pattern(this.datePattern)]),
       picture: new FormControl('')
     });
+    this.initErrors();
   }
 
-  checkValid(event) {
-    switch(event.target.name) {
-      case "date": {
-        this.checkDateValid(event);
-        break;
-      } case "event": {
-        this.checkEventValid(event);
-        break;
-      }
+  initErrors() {
+    this.errors = new Map<string, string>();
+    this.errors.set("event", "");
+    this.errors.set("date", "");
+  }
+
+  checkValid() {
+    if (this.inputForm.invalid) {
+      this.errors.forEach((value, key, mp) => {
+        mp.set(key, this.inputForm.get(key).hasError("matDatepickerParse") ? `${this.inputForm.get(key).errors.matDatepickerParse.text} is not a date` : "")
+        if (mp.get(key) == "") {
+          mp.set(key, this.inputForm.get(key).hasError("required") ? `${key} is required` : "");
+        }
+      })
+    } else {
+      this.errors.forEach((i) => {
+        i = "";
+      });
     }
   }
 
-  checkEventValid(event) {
-    if (this.registerForm.get(event.target.name).errors) {
-      this.eventHasError = this.registerForm.get(event.target.name).errors.required;
-      this.eventHasError ? this.eventError = "Please enter an event name" : this.eventError = "";
-    } else {
-      this.eventHasError = false;
-    }
-  }
-  checkDateValid(event) {
-    if (this.registerForm.get("date").errors) {
-      console.log(this.registerForm.get(event.target.name).errors);
-      if(this.registerForm.get(event.target.name).errors.matDatepickerParse) {
-        this.dateHasError = true;
-        this.dateError = `"${ this.registerForm.get(event.target.name).errors.matDatepickerParse.text }" is not a valid date`;
-      } else if(this.registerForm.get(event.target.name).errors.required) {
-        console.log(this.registerForm.get(event.target.name).errors.required);
-        this.dateHasError = true;
-        this.dateError = "Please enter a date";
-      } else {
-        this.dateHasError = false;
-        this.dateError = "";
-      }
-    } else {
-      this.dateHasError = false;
-      this.dateError = "";
-    }
-  }
   cancel() {
-    this.registerForm.reset();
+    this.inputForm.reset();
     this.router.navigate(["home"]);
   }
 
   submit() {
     this.setLoadingState(true);
-    if (this.registerForm.valid) {
+    if (this.inputForm.valid && this.inputForm.touched) {
       this.firestore.collection("registers").doc(this.firestore.createId()).set({
-        event: this.registerForm.value.event,
-        date: this.registerForm.value.date
+        event: this.inputForm.value.event,
+        date: this.inputForm.value.date
         // picture: this.registerForm.value.picture
       })
-      .then()
-      .catch((res) => {
-        alert(res);
-      })
-      .finally(() => {
-        this.setLoadingState(false);
-        this.registerForm.reset();
-      });
+        .then()
+        .catch((res) => {
+          alert(res);
+        })
+        .finally(() => {
+          this.setLoadingState(false);
+          this.inputForm.reset();
+        });
     } else {
       this.setLoadingState(false);
-      this.registerForm.errors.forEach(element => {
-        console.log(element);
-      });
-      alert(this.registerForm.errors);
     }
   }
 

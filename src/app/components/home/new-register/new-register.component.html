@@ -1,23 +1,23 @@
 <div class="formWrapper">
-    <form class="flexForm" [formGroup]="registerForm">
-        <div class="validationError" *ngIf="eventHasError">{{ eventError }}</div>
+    <form class="flexForm" [formGroup]="inputForm">
         <mat-form-field appearance="standard">
             <mat-label>Event</mat-label>
-            <input matInput name="event" type="text" formControlName="event" (blur)="checkValid($event)">
+            <input matInput name="event" type="text" formControlName="event" (blur)="checkValid()">
+            <mat-error *ngIf="this.inputForm.get('event').invalid">{{ errors.get("event") }}</mat-error>
         </mat-form-field>
-        <div class="validationError" *ngIf="dateHasError">{{ dateError }}</div>
         <mat-form-field appearance="standard">
             <mat-label>Date</mat-label>
-            <input matInput name="date" [matDatepicker]="picker" formControlName="date" (blur)="checkValid($event)">
+            <input matInput name="date" [matDatepicker]="picker" formControlName="date" (blur)="checkValid()">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="this.inputForm.get('date').invalid">{{ errors.get("date") }}</mat-error>
         </mat-form-field>
-        <input name="picture" type="file" formControlName="picture" (change)="onFileSelected($event)">
+        <input name="picture" type="file" formControlName="picture" (change)="onFileSelected()">
         <div class="buttons">
-            <button mat-raised-button color="warn" (click)="cancel()"
+            <button mat-raised-button color="warn" (click)="cancel()" type="button"
                 [disabled]="buttonDisabled">Close</button>
             <span></span>    
-            <button mat-raised-button color="primary" (click)="submit()"
+            <button mat-raised-button color="primary" (click)="submit()" type="submit"
                 [disabled]="buttonDisabled">{{ submitText }}</button>
         </div>
     </form>
