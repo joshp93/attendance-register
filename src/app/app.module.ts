@@ -27,6 +27,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { RegisterAttendanceComponent } from './components/register-attendance/register-attendance.component';
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { RegisterAttendanceComponent } from './components/register-attendance/re
     MatNativeDateModule,
     MatTooltipModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatSelectModule
   ],
   providers: [
     CustomValidationService,

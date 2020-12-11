@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
 
 @Component({
@@ -15,8 +16,17 @@ export class RegisterAttendanceComponent implements OnInit {
   submitText: string;
   buttonDisabled: boolean;
   loading: boolean;
+  events: any[];
 
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute) { }
+  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private fs: AngularFirestore) {
+    fs.collection("events").valueChanges().subscribe((val) => {
+      this.events = new Array();
+      val.forEach((e) => {
+        this.events.push(e);
+      });
+    });
+  }
+
   private datePattern: RegExp;
   errors: Map<string, string>;
 
@@ -26,7 +36,7 @@ export class RegisterAttendanceComponent implements OnInit {
     this.inputForm = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       event: new FormControl('', [Validators.required]),
-      date: new FormControl(new Date(), [Validators.required]), //Validators.pattern(this.datePattern)])
+      date: new FormControl(new Date(), [Validators.required])
     });
     this.initErrors();
   }
@@ -42,6 +52,9 @@ export class RegisterAttendanceComponent implements OnInit {
     if (this.inputForm.invalid) {
       this.errors.forEach((value, key, mp) => {
         mp.set(key, this.inputForm.get(key).hasError("matDatepickerParse") ? `${this.inputForm.get(key).errors.matDatepickerParse.text} is not a date` : "")
+        if (mp.get(key) == "") {
+          mp.set(key, this.inputForm.get(key).hasError("email") ? `${this.inputForm.value.email} is not a valid email` : "");
+        }
         if (mp.get(key) == "") {
           mp.set(key, this.inputForm.get(key).hasError("required") ? `${key} is required` : "");
         }
@@ -61,10 +74,17 @@ export class RegisterAttendanceComponent implements OnInit {
   submit() {
     this.setLoadingState(true);
     if (this.inputForm.valid && this.inputForm.touched) {
-      this.firestore.collection("registers").doc(this.firestore.createId()).set({
-        event: this.inputForm.value.event,
-        date: this.inputForm.value.date
-        // picture: this.registerForm.value.picture
+      // this.firestore.collection("attendances").doc(this.inputForm.value.email)
+      // .collection(this.inputForm.value.date).doc(this.inputForm.value.event).get()
+      // .toPromise().then(() => {
+      //   alert("You are already registered");
+      //   this.setLoadingState(false);
+      //   return;
+      // });
+
+      this.firestore.collection("attendances").doc(this.inputForm.value.email)
+      .collection(this.inputForm.value.date).doc(this.inputForm.value.event).set({
+        attended: ""
       })
         .then()
         .catch((res) => {
