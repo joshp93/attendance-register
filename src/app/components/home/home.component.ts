@@ -14,8 +14,8 @@ export class HomeComponent implements OnInit {
 
   }
 
-  newRegister() {
-    this.router.navigate([this.router.url + '/new-register']);
+  viewEvents() {
+    this.router.navigate([this.router.url + '/events']);
   }
 
 }

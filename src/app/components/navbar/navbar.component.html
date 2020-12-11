@@ -1,10 +1,7 @@
 <div class="navbar">
-    <ng-container *ngIf="loggedIn; else elseTemplate">
-        <div class="menuItem" (click)="logOut()">Shalom!<br>{{ user.email }}</div>
+    <ng-container *ngIf="user$ | async as user">
+        <div class="menuItem" (click)="logOut()">{{ user.email }}</div>
     </ng-container>
-    <ng-template #elseTemplate>
-        <p class="login">Please Log in...</p>
-    </ng-template>
     <div class="title" (click)="goHome()">
         <img src="../../../assets/ALS.png" alt="ALS Logo">
         <br>

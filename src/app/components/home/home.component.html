@@ -1,10 +1,18 @@
-<div class="wrapper">
-    <!-- <div class="tooltip">
-        <img src="../../../assets/add.png" alt="New Register" class="new" (click)="newRegister()">
-        <span class="tootipText">New Register</span>
-    </div> -->
-    <button mat-mini-fab color="primary" matTooltip="New Register" matTooltipPosition="above" (click)="newRegister()">
-        <mat-icon>create</mat-icon>
-    </button>
-    <app-registers></app-registers>
+<div class="contentWrapper">
+    <div class="gridColumn">
+        <button mat-raised-button color="primary" routerLink="./events">
+            <mat-icon>calendar_today</mat-icon>
+            <br>
+            Events
+            <br>
+            مناسبت ها
+        </button>
+        <button mat-raised-button color="primary" routerLink="./register-attendance">
+            <mat-icon>beenhere</mat-icon>
+            <br>
+            Register Attendance
+            <br>
+            ثبت نام حضور
+        </button>
+    </div>
 </div>

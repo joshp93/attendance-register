@@ -14,13 +14,13 @@ import { UserSession } from 'src/app/modules/user-session/user-session.module';
 export class NavbarComponent implements OnInit {
   email: String;
   loggedIn: boolean;
+  user$: Observable<firebase.User>;
 
   constructor(private auth: AngularFireAuth, private router: Router, private userSession: UserSession) {
-
+    this.user$ = auth.authState;
   }
 
   ngOnInit(): void {
-    // TODO: EventEmitter for logged in state
   }
 
   logOut() {

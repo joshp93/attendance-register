@@ -14,8 +14,8 @@ import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CustomValidationService } from './modules/custom-validation-service/custom-validation-service.module';
 import { UserSession } from './modules/user-session/user-session.module';
-import { RegistersComponent } from './components/home/registers/registers.component';
-import { NewRegisterComponent } from './components/home/new-register/new-register.component';
+import { EventsComponent } from './components/events/events.component';
+import { AddEventComponent } from './components/add-event/add-event.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,6 +26,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
+import { RegisterAttendanceComponent } from './components/register-attendance/register-attendance.component';
 
 @NgModule({
   declarations: [
@@ -34,8 +35,9 @@ import { MatTableModule } from "@angular/material/table";
     SignUpComponent,
     HomeComponent,
     NavbarComponent,
-    NewRegisterComponent,
-    RegistersComponent
+    AddEventComponent,
+    EventsComponent,
+    RegisterAttendanceComponent
   ],
   imports: [
     BrowserModule,

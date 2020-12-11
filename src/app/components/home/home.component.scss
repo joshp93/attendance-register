@@ -1,24 +1,6 @@
-.wrapper {
-    width: 60%;
-    margin-left: 20%;
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-}
-.new {
-    height: 50px;
-    width: 50px;
-    border-radius: 5px;
-}
-.new:hover {
-    background-color: rgba(240, 255, 240, 0.7);
-}
-.new:hover {
-    cursor: pointer;
-    text-decoration: underline;
-}
 button {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 10px;
+    width: auto;
+    height: 150px;
+    font-size: large;
+    margin: 10px
 }

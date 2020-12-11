@@ -1,5 +1,5 @@
-<div class="formWrapper">
-    <form class="flexForm" [formGroup]="inputForm">
+<div class="contentWrapper">
+    <form class="flexColumn" [formGroup]="inputForm">
         <mat-form-field appearance="standard">
             <mat-label>Event</mat-label>
             <input matInput name="event" type="text" formControlName="event" (blur)="checkValid()">
@@ -12,9 +12,9 @@
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="this.inputForm.get('date').invalid">{{ errors.get("date") }}</mat-error>
         </mat-form-field>
-        <input name="picture" type="file" formControlName="picture" (change)="onFileSelected()">
-        <div class="buttons">
-            <button mat-raised-button color="warn" (click)="cancel()" type="button"
+        <input name="picture" type="file" formControlName="picture" (change)="onFileSelected($event)">
+        <div class="formButtons">
+            <button mat-raised-button color="warn" (click)="close()" type="button"
                 [disabled]="buttonDisabled">Close</button>
             <span></span>    
             <button mat-raised-button color="primary" (click)="submit()" type="submit"

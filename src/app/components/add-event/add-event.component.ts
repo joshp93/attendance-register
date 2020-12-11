@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
 import { UserSession } from 'src/app/modules/user-session/user-session.module';
 import { AngularFirestore, CollectionReference, DocumentReference } from "@angular/fire/firestore";
 import { Key } from 'protractor';
+import { relative } from 'path';
+import { Route } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-new-register',
-  templateUrl: './new-register.component.html',
-  styleUrls: ['./new-register.component.scss']
+  templateUrl: './add-event.component.html',
+  styleUrls: ['./add-event.component.scss']
 })
-export class NewRegisterComponent implements OnInit {
+export class AddEventComponent implements OnInit {
   inputForm: FormGroup;
   required: string;
   submitText: string;
@@ -23,7 +25,7 @@ export class NewRegisterComponent implements OnInit {
   dateHasError: boolean;
   dateError: string;
 
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore) { }
+  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute) { }
   private datePattern: RegExp;
   private selectedFile = null;
   errors: Map<string, string>;
@@ -60,18 +62,17 @@ export class NewRegisterComponent implements OnInit {
     }
   }
 
-  cancel() {
+  close() {
     this.inputForm.reset();
-    this.router.navigate(["home"]);
+    this.router.navigate(["../"], { relativeTo: this.route });
   }
 
   submit() {
     this.setLoadingState(true);
     if (this.inputForm.valid && this.inputForm.touched) {
-      this.firestore.collection("registers").doc(this.firestore.createId()).set({
+      this.firestore.collection("events").doc(this.firestore.createId()).set({
         event: this.inputForm.value.event,
         date: this.inputForm.value.date
-        // picture: this.registerForm.value.picture
       })
         .then()
         .catch((res) => {

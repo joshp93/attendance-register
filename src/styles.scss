@@ -11,33 +11,37 @@ body {
     background-attachment: fixed;
     background-color: papayawhip;
 }
-
 input:focus {
     outline: none;
 }
-
-.flexForm {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-.formWrapper {
+.contentWrapper {
     width: 60%;
     margin-left: 20%;
+}
+.contentWrapper form {
     padding: 5px;
     background-color: rgba(211, 211, 211, 0.9);
     border-radius: 5px;
 }
-
-.flexForm button {
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.flexColumn button {
     width: 80px;
     align-self: flex-end;
 }
-
-// .validationError {
-//     font-size: 10px;
-//     color: red;
-// }
-// .validationError::before {
-//     content: "*";
-// }
+.formButtons {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+}
+.formButtons span {
+    margin: auto;
+}

@@ -1,0 +1,29 @@
+<div class="contentWrapper">
+    <form class="flexColumn" [formGroup]="inputForm">
+        <mat-form-field appearance="standard">
+            <mat-label>Email</mat-label>
+            <input matInput id="email" name="email" formControlName="email" (blur)="checkValid()">
+            <mat-error *ngIf="this.inputForm.get('email').invalid">{{ errors.get("email") }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+            <mat-label>Event</mat-label>
+            <input matInput id="Event" name="Event" formControlName="event" (blur)="checkValid()">
+            <mat-error *ngIf="this.inputForm.get('event').invalid">{{ errors.get("event") }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="standard">
+            <mat-label>Date</mat-label>
+            <input matInput name="date" [matDatepicker]="picker" formControlName="date" (blur)="checkValid()">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="this.inputForm.get('date').invalid">{{ errors.get("date") }}</mat-error>
+        </mat-form-field>
+        
+        <div class="formButtons">
+            <button mat-raised-button color="warn" (click)="close()" type="button"
+                [disabled]="buttonDisabled">Close</button>
+            <span></span>
+            <button mat-raised-button color="primary" (click)="submit()" [disabled]="buttonDisabled"
+                type="submit">{{ submitText }}</button>
+        </div>
+    </form>
+</div>
