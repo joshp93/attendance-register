@@ -57,16 +57,7 @@ export class LoginComponent implements OnInit {
   logIn() {
     this.setLoadingState(true);
     if (this.inputForm.valid) {
-      this.auth.signInWithEmailAndPassword(this.inputForm.value.email, this.inputForm.value.password).then((res) => {
-        let userSession = new UserSession();
-        userSession.setStoredUserInfo(res.user);
-        this.setLoadingState(false);
-        this.router.navigate(['/home']);
-      })
-      .catch((res) => {
-        alert(res.message);
-        this.setLoadingState(false);
-      });
+      this.setLoadingState(false);
     } else {
       alert("Please fill out all information");
       this.setLoadingState(false);
