@@ -7,6 +7,7 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { LoginGuard } from './guards/login.guard';
 import { EventsComponent } from './components/events/events.component';
 import { RegisterAttendanceComponent } from './components/register-attendance/register-attendance.component';
+import { ChurchEvent } from './models/churchEvent.model';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },

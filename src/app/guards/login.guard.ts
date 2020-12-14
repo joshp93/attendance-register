@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { UserSession } from '../modules/user-session/user-session.module';
-import firebase from "firebase/app";
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,66 +10,19 @@ import firebase from "firebase/app";
 
 export class LoginGuard implements CanActivate {
 
-  constructor(private router: Router, private auth: AngularFireAuth, private userSession: UserSession) { }
+  constructor(private router: Router, private auth: AngularFireAuth) { }
+
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Promise<boolean> {
-    let storedInfo = this.userSession.getStoredUserInfo();
-    if (storedInfo.email && storedInfo.uid) {
-
-      return new Promise<boolean>((resolve, reject) => {
-        this.getCurrentUser()
-          .then((res) => {
-            resolve(this.storeUserInfoAndResolve(res));
-            console.log("User info stored, able to get current user.");
-          })
-          .catch((res) => {
-            reject(this.redirectToLogin());
-            console.log("User Info storeed, but unable to get current user: " + res);
-          });
-      });
-
-    } else {
-
-      return new Promise<boolean>((resolve, reject) => {
-        this.getCurrentUser()
-          .then((res) => {
-            resolve(this.storeUserInfoAndResolve(res));
-            console.log("User info was not stored, but able to get user. User info has now been stored.");
-          })
-          .catch((res) => {
-            reject(this.redirectToLogin());
-            console.log("User info was not stored, unable to get current user: " + res);
-          });
-      });
-
-    }
+    state: RouterStateSnapshot): Observable<boolean> {
+    return this.auth.authState.pipe(map((user) => {
+        return user ? true : this.redirectToLogin();
+      })
+    );
   }
 
   redirectToLogin(): boolean {
-    this.userSession.clearStoredUserInfo();
     this.router.navigate(['/login']);
     return false;
-  }
-
-  storeUserInfoAndResolve(res): boolean {
-    this.userSession.setStoredUserInfo(res);
-    return true;
-  }
-
-  getCurrentUser(): Promise<firebase.User> {
-    return new Promise<firebase.User>((resolve, reject) => {
-      this.auth.currentUser
-        .then((res) => {
-          if (!res) {
-            reject(res);
-          } else {
-            resolve(res);
-          }
-        })
-        .catch((res) => {
-          reject(res);
-        });
-    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,9 +8,11 @@ import { AngularFirestore, CollectionReference, DocumentReference } from "@angul
 import { Key } from 'protractor';
 import { relative } from 'path';
 import { Route } from '@angular/compiler/src/core';
+import { AttendanceService } from 'src/app/services/attendance-service.service';
+import { ChurchEvent } from 'src/app/models/churchEvent.model';
 
 @Component({
-  selector: 'app-new-register',
+  selector: 'app-add-event',
   templateUrl: './add-event.component.html',
   styleUrls: ['./add-event.component.scss']
 })
@@ -24,11 +26,17 @@ export class AddEventComponent implements OnInit {
   eventError: string;
   dateHasError: boolean;
   dateError: string;
-
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute) { }
   private datePattern: RegExp;
   private selectedFile = null;
   errors: Map<string, string>;
+  eventId: { [k: string]: any; };
+  
+
+  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private attendaceService: AttendanceService) {
+    this.eventId = this.router.getCurrentNavigation().extras.state;
+    // Get Event from firestore if the eventID isn't blank. load churchEvent into the view
+    // let churchEvent = new ChurchEvent()
+  }
 
   ngOnInit(): void {
     this.setLoadingState(false);
@@ -70,17 +78,12 @@ export class AddEventComponent implements OnInit {
   submit() {
     this.setLoadingState(true);
     if (this.inputForm.valid && this.inputForm.touched) {
-      this.firestore.collection("events").doc(this.firestore.createId()).set({
-        event: this.inputForm.value.event,
-        date: this.inputForm.value.date
-      })
-        .then()
-        .catch((res) => {
-          alert(res);
-        })
+      this.attendaceService.setEvent(new ChurchEvent('', this.inputForm.value.event, this.inputForm.value.date))
+        .catch((reason) => console.log(reason))
         .finally(() => {
           this.setLoadingState(false);
           this.inputForm.reset();
+          this.router.navigate(["home"]);
         });
     } else {
       this.setLoadingState(false);

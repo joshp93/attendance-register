@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
 import { UserSession } from 'src/app/modules/user-session/user-session.module';
+import { AttendanceService } from 'src/app/services/attendance-service.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   logInText: string;
   errors: Map<string, string>;
   
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private route: ActivatedRoute) { }
+  constructor(private fb: FormBuilder, private attendanceService: AttendanceService, private router: Router, private customValidation: CustomValidationService, private route: ActivatedRoute) { }
   
   ngOnInit(): void {
     this.setLoadingState(false);
@@ -57,7 +58,8 @@ export class LoginComponent implements OnInit {
   logIn() {
     this.setLoadingState(true);
     if (this.inputForm.valid) {
-      this.setLoadingState(false);
+      this.attendanceService.logIn(this.inputForm.value.email, this.inputForm.value.password)
+        .finally(() => this.setLoadingState(false));
     } else {
       alert("Please fill out all information");
       this.setLoadingState(false);

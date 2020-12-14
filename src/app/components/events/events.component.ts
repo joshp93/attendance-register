@@ -3,6 +3,8 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { Router } from '@angular/router';
 import { Console } from 'console';
 import { Observable } from "rxjs";
+import { ChurchEvent } from 'src/app/models/churchEvent.model';
+import { AttendanceService } from 'src/app/services/attendance-service.service';
 
 
 @Component({
@@ -12,9 +14,9 @@ import { Observable } from "rxjs";
 })
 export class EventsComponent implements OnInit {
   displayedColumns: string[] = ['event', 'date'];
-  dataSource: Observable<any>;
+  dataSource: Observable<ChurchEvent[]>;
 
-  constructor(private fs: AngularFirestore, private router: Router) { 
+  constructor(private fs: AngularFirestore, private router: Router, private attendanceService: AttendanceService) { 
     this.getEvents();
   }
   
@@ -22,7 +24,7 @@ export class EventsComponent implements OnInit {
   }
 
   getEvents() {
-    this.dataSource = this.fs.collection("events").valueChanges();
+    this.dataSource = this.attendanceService.getEvents();
   }
 
   addEvent() {
@@ -30,6 +32,6 @@ export class EventsComponent implements OnInit {
   }
 
   viewEvent(event) {
-    console.log(event);
+    this.router.navigateByUrl(this.router.url + "/add-event", { state: event.path[0].id });
   }
 }
