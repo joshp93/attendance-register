@@ -67,12 +67,24 @@ export class AttendanceService {
     );
   }
 
+  getEvent(eventId: string): Observable<ChurchEvent> {
+    let eventsCol: AngularFirestoreCollection<ChurchEvent> = this.firestore.collection("events");
+
+    return eventsCol.doc(eventId).get().pipe(
+      map(doc => {
+        return new ChurchEvent(doc.id, doc.data().name, doc.data().date);
+      })
+    );
+  }
+
   setEvent(churchEvent: ChurchEvent) {
-    churchEvent.id = this.firestore.createId();
+    if (!churchEvent.id) {
+      churchEvent.id = this.firestore.createId();
+    }
     return this.firestore.collection("events").doc(churchEvent.id).set(Object.assign({}, churchEvent), { merge: true });
   }
 
   updateEvent() {
-    
+
   }
 }

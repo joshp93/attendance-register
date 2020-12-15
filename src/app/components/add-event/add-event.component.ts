@@ -22,29 +22,34 @@ export class AddEventComponent implements OnInit {
   submitText: string;
   buttonDisabled: boolean;
   loading: boolean;
-  eventHasError: boolean;
-  eventError: string;
-  dateHasError: boolean;
-  dateError: string;
   private datePattern: RegExp;
   private selectedFile = null;
   errors: Map<string, string>;
-  eventId: { [k: string]: any; };
-  
+  eventId: string;
 
   constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private attendaceService: AttendanceService) {
-    this.eventId = this.router.getCurrentNavigation().extras.state;
-    // Get Event from firestore if the eventID isn't blank. load churchEvent into the view
-    // let churchEvent = new ChurchEvent()
+    this.initInputForm();
+    this.eventId = "";
+    if (this.router.getCurrentNavigation().extras.state) {
+      this.eventId = this.router.getCurrentNavigation().extras.state["id"];
+      this.attendaceService.getEvent(this.eventId).subscribe((val) => {
+        this.inputForm.setValue({
+          event: val.name,
+          date: val.date.toDate()
+        })
+      });
+    }
   }
 
   ngOnInit(): void {
+  }
+
+  initInputForm() {
     this.setLoadingState(false);
     this.datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
     this.inputForm = this.fb.group({
-      event: new FormControl('', Validators.required),
-      date: new FormControl(new Date(), [Validators.required]), //Validators.pattern(this.datePattern)]),
-      picture: new FormControl('')
+      event: new FormControl("", Validators.required),
+      date: new FormControl(new Date(), [Validators.required])
     });
     this.initErrors();
   }
@@ -78,12 +83,12 @@ export class AddEventComponent implements OnInit {
   submit() {
     this.setLoadingState(true);
     if (this.inputForm.valid && this.inputForm.touched) {
-      this.attendaceService.setEvent(new ChurchEvent('', this.inputForm.value.event, this.inputForm.value.date))
+      this.attendaceService.setEvent(new ChurchEvent(this.eventId, this.inputForm.value.event, this.inputForm.value.date))
         .catch((reason) => console.log(reason))
         .finally(() => {
           this.setLoadingState(false);
           this.inputForm.reset();
-          this.router.navigate(["home"]);
+          this.router.navigate(["home/events"]);
         });
     } else {
       this.setLoadingState(false);

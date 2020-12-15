@@ -74,13 +74,6 @@ export class RegisterAttendanceComponent implements OnInit {
   submit() {
     this.setLoadingState(true);
     if (this.inputForm.valid && this.inputForm.touched) {
-      // this.firestore.collection("attendances").doc(this.inputForm.value.email)
-      // .collection(this.inputForm.value.date).doc(this.inputForm.value.event).get()
-      // .toPromise().then(() => {
-      //   alert("You are already registered");
-      //   this.setLoadingState(false);
-      //   return;
-      // });
 
       this.firestore.collection("attendances").doc(this.inputForm.value.email)
       .collection(this.inputForm.value.date).doc(this.inputForm.value.event).set({
