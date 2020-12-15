@@ -8,7 +8,10 @@ import { User } from '../models/user.model';
 import { IUser } from "../models/IUser.Model";
 import { UserSession } from '../modules/user-session/user-session.module';
 import { ChurchEvent } from '../models/churchEvent.model';
-import { IChurchEvent } from '../models/IChurchEvent.model';
+import { Attendance } from '../models/attendance';
+import { resolve } from 'dns';
+import { promise } from 'protractor';
+import { rejects } from 'assert';
 
 @Injectable({
   providedIn: 'root'
@@ -84,7 +87,34 @@ export class AttendanceService {
     return this.firestore.collection("events").doc(churchEvent.id).set(Object.assign({}, churchEvent), { merge: true });
   }
 
-  updateEvent() {
+  getAttendance(attendance: Attendance): Promise<boolean> {
+    let attEventDoc: AngularFirestoreDocument<string> = this.firestore.collection("attendaces")
+      .doc(attendance.email).collection("dates").doc(attendance.date.toDate().toDateString())
+      .collection("attendanceEvents").doc(attendance.event);
 
+    return new Promise<boolean>((resolve, reject) => {
+      attEventDoc.get().toPromise()
+        .then((doc) => {
+          doc ? resolve(true) : resolve(false);
+        })
+        .catch((reason) => reject(false));
+    });
+  }
+
+  setAttendance(attendance: Attendance) {
+    // check that the attendance hasn't already been registered
+    this.getAttendance(attendance)
+      .then((exists) => {
+        if (exists == false) {
+          let attEventDoc: AngularFirestoreDocument<string> = this.firestore.collection("attendaces")
+            .doc(attendance.email).collection("dates").doc(attendance.date.toDate().toDateString())
+            .collection("attendanceEvents").doc(attendance.event);
+          
+          attEventDoc.set(attendance.event)
+            .catch((reason) => console.log(reason));
+        } else {
+          alert(`You are already registered for ${attendance.event} on ${attendance.date}`);
+        }
+      });
   }
 }
