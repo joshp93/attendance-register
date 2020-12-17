@@ -98,6 +98,8 @@ export class AttendanceService {
   //   });
   // }
 
+  // TODO - Get attendance
+  // TODO - Return boolean Promise in order to distinguish between success and failure
   async setAttendance(attendance: Attendance) {
     let attDoc: AngularFirestoreDocument<IAttendance> = this.firestore.collection("attendances").doc(attendance.toString());
     attDoc.set({
