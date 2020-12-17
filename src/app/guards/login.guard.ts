@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export class LoginGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> {
     return this.auth.authState.pipe(map((user) => {
-        return user ? true : this.redirectToLogin();
+        return user ? this.allowAccess(route) : this.redirectToLogin();
       })
     );
   }
@@ -24,5 +24,9 @@ export class LoginGuard implements CanActivate {
   redirectToLogin(): boolean {
     this.router.navigate(['/login']);
     return false;
+  }
+
+  allowAccess(route: ActivatedRouteSnapshot): boolean {
+    return true;
   }
 }

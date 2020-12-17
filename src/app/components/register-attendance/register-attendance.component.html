@@ -1,20 +1,20 @@
 <div class="contentWrapper">
     <form class="flexColumn" [formGroup]="inputForm">
         <mat-form-field appearance="standard">
-            <mat-label>Email</mat-label>
+            <mat-label>Email - پست الکترونیک</mat-label>
             <input matInput id="email" name="email" formControlName="email" (blur)="checkValid()">
             <mat-error *ngIf="this.inputForm.get('email').invalid">{{ errors.get("email") }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="standard">
-            <mat-label>Event</mat-label>
+            <mat-label>Event - رویداد</mat-label>
             <mat-select formControlName="event" (blur)="checkValid()">
-              <mat-option *ngFor="let e of events" [value]="e.event">{{ e.name }}</mat-option>
+              <mat-option *ngFor="let e of events" [value]="e.name">{{ e.name }}</mat-option>
             </mat-select>
           </mat-form-field>
 
         <mat-form-field appearance="standard">
-            <mat-label>Date</mat-label>
+            <mat-label>Date - تاریخ</mat-label>
             <input matInput name="date" [matDatepicker]="picker" formControlName="date" (blur)="checkValid()">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -23,7 +23,7 @@
 
         <div class="formButtons">
             <button mat-raised-button color="warn" (click)="close()" type="button"
-                [disabled]="buttonDisabled">Close</button>
+                [disabled]="buttonDisabled">Close - بستن</button>
             <span></span>
             <button mat-raised-button color="primary" (click)="submit()" [disabled]="buttonDisabled"
                 type="submit">{{ submitText }}</button>

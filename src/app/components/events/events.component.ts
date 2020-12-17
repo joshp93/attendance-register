@@ -3,7 +3,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { Router } from '@angular/router';
 import { Console } from 'console';
 import { Observable } from "rxjs";
-import { ChurchEvent } from 'src/app/models/churchEvent.model';
+import { ChurchEvent } from 'src/app/models/ChurchEvent.model';
 import { AttendanceService } from 'src/app/services/attendance-service.service';
 
 
@@ -24,7 +24,7 @@ export class EventsComponent implements OnInit {
   }
 
   getEvents() {
-    this.dataSource = this.attendanceService.getEvents();
+    this.dataSource = this.attendanceService.getEventsWithIds(); 
   }
 
   addEvent() {

@@ -5,13 +5,10 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { switchMap, map } from "rxjs/operators";
 import { User } from '../models/user.model';
-import { IUser } from "../models/IUser.Model";
-import { UserSession } from '../modules/user-session/user-session.module';
-import { ChurchEvent } from '../models/churchEvent.model';
-import { Attendance } from '../models/attendance';
-import { resolve } from 'dns';
-import { promise } from 'protractor';
-import { rejects } from 'assert';
+import { ChurchEvent } from '../models/ChurchEvent.model';
+import { Attendance } from '../models/Attendance.model';
+import { IAttendance } from '../models/IAttendance.model';
+import firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -56,14 +53,14 @@ export class AttendanceService {
     return userRef.set(data, { merge: true });
   }
 
-  getEvents() {
+  getEventsWithIds() {
     let eventsCol: AngularFirestoreCollection<ChurchEvent> = this.firestore.collection("events");
     let churchEvents = Array<ChurchEvent>();
 
     return eventsCol.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
-          let churchEvent = new ChurchEvent(a.payload.doc.id, a.payload.doc.data().name, a.payload.doc.data().date)
+          let churchEvent = new ChurchEvent(a.payload.doc.id, a.payload.doc.data().name, a.payload.doc.data().date.toDate())
           return churchEvent;
         });
       })
@@ -75,7 +72,7 @@ export class AttendanceService {
 
     return eventsCol.doc(eventId).get().pipe(
       map(doc => {
-        return new ChurchEvent(doc.id, doc.data().name, doc.data().date);
+        return new ChurchEvent(doc.id, doc.data().name, doc.data().date.toDate());
       })
     );
   }
@@ -87,34 +84,32 @@ export class AttendanceService {
     return this.firestore.collection("events").doc(churchEvent.id).set(Object.assign({}, churchEvent), { merge: true });
   }
 
-  getAttendance(attendance: Attendance): Promise<boolean> {
-    let attEventDoc: AngularFirestoreDocument<string> = this.firestore.collection("attendaces")
-      .doc(attendance.email).collection("dates").doc(attendance.date.toDate().toDateString())
-      .collection("attendanceEvents").doc(attendance.event);
+  // getAttendance(attendance: Attendance): Promise<any> {
+  //   let attEventDoc: AngularFirestoreDocument = this.firestore.collection("attendaces")
+  //     .doc(attendance.email).collection("dates").doc(attendance.date.toDate().toDateString())
+  //     .collection("attendanceEvents").doc(attendance.event);
 
-    return new Promise<boolean>((resolve, reject) => {
-      attEventDoc.get().toPromise()
-        .then((doc) => {
-          doc ? resolve(true) : resolve(false);
-        })
-        .catch((reason) => reject(false));
-    });
+  //   return new Promise<any>((resolve, reject) => {
+  //     attEventDoc.get().toPromise()
+  //       .then((doc) => {
+  //         resolve(doc);
+  //       })
+  //       .catch((reason) => reject(reason));
+  //   });
+  // }
+
+  async setAttendance(attendance: Attendance) {
+    let attDoc: AngularFirestoreDocument<IAttendance> = this.firestore.collection("attendances").doc(attendance.toString());
+    attDoc.set({
+      email: attendance.email,
+      event: attendance.event,
+      date:attendance.date
+    })
+    .catch((reason) => console.error(reason));
   }
 
-  setAttendance(attendance: Attendance) {
-    // check that the attendance hasn't already been registered
-    this.getAttendance(attendance)
-      .then((exists) => {
-        if (exists == false) {
-          let attEventDoc: AngularFirestoreDocument<string> = this.firestore.collection("attendaces")
-            .doc(attendance.email).collection("dates").doc(attendance.date.toDate().toDateString())
-            .collection("attendanceEvents").doc(attendance.event);
-          
-          attEventDoc.set(attendance.event)
-            .catch((reason) => console.log(reason));
-        } else {
-          alert(`You are already registered for ${attendance.event} on ${attendance.date}`);
-        }
-      });
+  getEvents(): Observable<ChurchEvent[]> {
+    let eventsCol: AngularFirestoreCollection<ChurchEvent> = this.firestore.collection("events");
+    return eventsCol.valueChanges();
   }
 }

@@ -4,7 +4,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Attendance } from 'src/app/models/Attendance.model';
+import { ChurchEvent } from 'src/app/models/ChurchEvent.model';
 import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
+import { AttendanceService } from 'src/app/services/attendance-service.service';
 
 @Component({
   selector: 'app-register-attendance',
@@ -16,14 +19,11 @@ export class RegisterAttendanceComponent implements OnInit {
   submitText: string;
   buttonDisabled: boolean;
   loading: boolean;
-  events: any[];
+  events: ChurchEvent[];
 
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private fs: AngularFirestore) {
-    fs.collection("events").valueChanges().subscribe((val) => {
-      this.events = new Array();
-      val.forEach((e) => {
-        this.events.push(e);
-      });
+  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private attendanceService: AttendanceService) {
+    this.attendanceService.getEvents().subscribe((observer) => {
+      this.events = observer;
     });
   }
 
@@ -74,19 +74,14 @@ export class RegisterAttendanceComponent implements OnInit {
   submit() {
     this.setLoadingState(true);
     if (this.inputForm.valid && this.inputForm.touched) {
-
-      this.firestore.collection("attendances").doc(this.inputForm.value.email)
-      .collection(this.inputForm.value.date).doc(this.inputForm.value.event).set({
-        attended: ""
-      })
-        .then()
-        .catch((res) => {
-          alert(res);
-        })
-        .finally(() => {
+      let attendance = new Attendance(this.inputForm.value.email, this.inputForm.value.event, this.inputForm.value.date);
+      this.attendanceService.setAttendance(attendance)
+        .then(() => {
+          alert(`You are registered for ${attendance.event}!\nشما ثبت نام کرده اید! ${attendance.event}`);
           this.setLoadingState(false);
-          this.inputForm.reset();
+          this.router.navigate(["home"]);
         });
+
     } else {
       this.setLoadingState(false);
     }
@@ -94,7 +89,7 @@ export class RegisterAttendanceComponent implements OnInit {
 
   setLoadingState(isLoading: boolean) {
     isLoading ? this.buttonDisabled = true : this.buttonDisabled = false;
-    isLoading ? this.submitText = "..." : this.submitText = "Submit";
+    isLoading ? this.submitText = "..." : this.submitText = "Submit - ارائه دادن";
     this.loading = isLoading;
   }
 

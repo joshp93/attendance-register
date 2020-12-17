@@ -9,7 +9,7 @@ import { Key } from 'protractor';
 import { relative } from 'path';
 import { Route } from '@angular/compiler/src/core';
 import { AttendanceService } from 'src/app/services/attendance-service.service';
-import { ChurchEvent } from 'src/app/models/churchEvent.model';
+import { ChurchEvent } from 'src/app/models/ChurchEvent.model';
 
 @Component({
   selector: 'app-add-event',

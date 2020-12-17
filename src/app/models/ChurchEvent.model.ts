@@ -1,13 +1,14 @@
 import firebase from "firebase/app";
-export class ChurchEvent {
+import { IChurchEvent } from './IChurchEvent.model';
+export class ChurchEvent implements IChurchEvent {
     id: string;
     name: string;
     date: firebase.firestore.Timestamp;
 
-    constructor(id: string, name: string, date: firebase.firestore.Timestamp) {
+    constructor(id: string, name: string, date: Date) {
         this.id = id;
         this.name = name;
-        this.date = date;
+        this.date = firebase.firestore.Timestamp.fromDate(date);
     }
 
     toString() {

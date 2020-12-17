@@ -1,4 +1,6 @@
-export class User {
+import { IUser } from './IUser.Model';
+
+export class User implements IUser {
     uid: string;
     email: string; 
 
