@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
 import { switchMap, map } from "rxjs/operators";
 import { User } from '../models/user.model';
 import { ChurchEvent } from '../models/ChurchEvent.model';
@@ -84,34 +84,40 @@ export class AttendanceService {
     return this.firestore.collection("events").doc(churchEvent.id).set(Object.assign({}, churchEvent), { merge: true });
   }
 
-  // getAttendance(attendance: Attendance): Promise<any> {
-  //   let attEventDoc: AngularFirestoreDocument = this.firestore.collection("attendaces")
-  //     .doc(attendance.email).collection("dates").doc(attendance.date.toDate().toDateString())
-  //     .collection("attendanceEvents").doc(attendance.event);
-
-  //   return new Promise<any>((resolve, reject) => {
-  //     attEventDoc.get().toPromise()
-  //       .then((doc) => {
-  //         resolve(doc);
-  //       })
-  //       .catch((reason) => reject(reason));
-  //   });
-  // }
-
   // TODO - Get attendance
-  // TODO - Return boolean Promise in order to distinguish between success and failure
-  async setAttendance(attendance: Attendance) {
-    let attDoc: AngularFirestoreDocument<IAttendance> = this.firestore.collection("attendances").doc(attendance.toString());
-    attDoc.set({
-      email: attendance.email,
-      event: attendance.event,
-      date:attendance.date
-    })
-    .catch((reason) => console.error(reason));
+  setAttendance(attendance: Attendance): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+
+      let attDoc: AngularFirestoreDocument<IAttendance> = this.firestore.collection("attendances").doc(attendance.toString());
+      attDoc.set({
+        email: attendance.email,
+        event: attendance.event,
+        date: attendance.date
+      })
+        .then(() => resolve(true))
+        .catch((reason) => {
+          console.error(reason);
+          reject(false);
+        });
+
+    });
   }
 
   getEvents(): Observable<ChurchEvent[]> {
     let eventsCol: AngularFirestoreCollection<ChurchEvent> = this.firestore.collection("events");
     return eventsCol.valueChanges();
+  }
+
+  getAttendance(email: string | null): Observable<Attendance[]> {
+    let attendanceCol: AngularFirestoreCollection<Attendance> = (email ? this.firestore.collection("attendances", ref => ref.where('email', '>=', email)) : this.firestore.collection("attendances"));
+    return attendanceCol.get().pipe(
+      map((querySnap) => {
+        let attendances = new Array<Attendance>();
+        querySnap.docs.forEach((doc) => {
+          attendances.push(new Attendance(doc.data().email, doc.data().event, doc.data().date.toDate()));
+        });
+        return attendances;
+      })
+    );
   }
 }

@@ -16,7 +16,7 @@
 
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef> Date </th>
-      <td mat-cell *matCellDef="let churchEvent" id="{{ churchEvent.id }}"> {{ churchEvent.date.toDate() }} </td>
+      <td mat-cell *matCellDef="let churchEvent" id="{{ churchEvent.id }}"> {{ churchEvent.date.toDate().toDateString() }} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

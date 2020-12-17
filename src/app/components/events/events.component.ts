@@ -16,7 +16,7 @@ export class EventsComponent implements OnInit {
   displayedColumns: string[] = ['event', 'date'];
   dataSource: Observable<ChurchEvent[]>;
 
-  constructor(private fs: AngularFirestore, private router: Router, private attendanceService: AttendanceService) { 
+  constructor(private router: Router, private attendanceService: AttendanceService) { 
     this.getEvents();
   }
   

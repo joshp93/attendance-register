@@ -28,6 +28,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { RegisterAttendanceComponent } from './components/register-attendance/register-attendance.component';
 import { MatSelectModule } from "@angular/material/select";
+import { ViewAttendanceComponent } from './components/view-attendance/view-attendance.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { MatSelectModule } from "@angular/material/select";
     NavbarComponent,
     AddEventComponent,
     EventsComponent,
-    RegisterAttendanceComponent
+    RegisterAttendanceComponent,
+    ViewAttendanceComponent
   ],
   imports: [
     BrowserModule,

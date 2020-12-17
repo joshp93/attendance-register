@@ -78,10 +78,15 @@ export class RegisterAttendanceComponent implements OnInit {
       this.attendanceService.setAttendance(attendance)
         .then(() => {
           alert(`You are registered for ${attendance.event}!\nشما ثبت نام کرده اید! ${attendance.event}`);
-          this.setLoadingState(false);
           this.router.navigate(["home"]);
+        })
+        .catch(() => {
+          alert("There was a problem registering your attendance\nمشکلی در ثبت نام حضور شما وجود داشت");
+        })
+        .finally(() => {
+          this.inputForm.reset();
+          this.setLoadingState(false);
         });
-
     } else {
       this.setLoadingState(false);
     }
