@@ -13,32 +13,37 @@ import { ExportService } from 'src/app/services/export.service';
 export class ViewAttendanceComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['email', 'event', 'date'];
   dataSource: Observable<Attendance[]>;
+  attendances: Attendance[];
+  emails: string[];
   inputForm: FormGroup;
-  @ViewChild("attendanceTable") attendaceTable: ElementRef;
 
   ngAfterViewInit() {
-
   }
+
   constructor(private attendanceService: AttendanceService, private fb: FormBuilder, private exportService: ExportService) {
+    this.getAttenderEmails();
     this.getAttendance(null);
   }
 
   ngOnInit(): void {
     this.inputForm = this.fb.group({
       email: new FormControl(''),
-      event: new FormControl('')
     });
   }
 
   updateResults() {
-    this.getAttendance(this.inputForm.value.email, this.inputForm.value.event);
+    this.getAttendance(this.inputForm.value.email);
   }
 
-  getAttendance(email?: string, event?: string) {
-    this.dataSource = this.attendanceService.getAttendance(email);
+  getAttendance(email?: string) {
+    this.attendanceService.getAttendance(email).subscribe((results) => this.attendances = results);
+  }
+
+  getAttenderEmails() {
+    this.attendanceService.getAttenderEmails().subscribe((results) => this.emails = results);
   }
 
   exportDataToExcel() {
-    this.exportService.exportTableElmToExcel(this.attendaceTable, "Attendance")
+    this.exportService.exportAttendanceToCsv(this.attendances);
   }
 }

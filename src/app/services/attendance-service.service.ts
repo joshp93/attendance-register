@@ -109,7 +109,7 @@ export class AttendanceService {
   }
 
   getAttendance(email: string | null): Observable<Attendance[]> {
-    let attendanceCol: AngularFirestoreCollection<Attendance> = (email ? this.firestore.collection("attendances", ref => ref.where('email', '>=', email)) : this.firestore.collection("attendances"));
+    let attendanceCol: AngularFirestoreCollection<Attendance> = (email ? this.firestore.collection("attendances", ref => ref.where('email', '==', email)) : this.firestore.collection("attendances"));
     return attendanceCol.get().pipe(
       map((querySnap) => {
         let attendances = new Array<Attendance>();
@@ -119,5 +119,20 @@ export class AttendanceService {
         return attendances;
       })
     );
+  }
+
+  getAttenderEmails(): Observable<string[]> {
+    let emailsCol: AngularFirestoreCollection<Attendance> = this.firestore.collection("attendances");
+
+    return emailsCol.valueChanges().pipe(
+      map(docs => {
+        let emails = new Map<string, string>();
+        emails.set("", ""); //Add blank option
+        docs.forEach((doc) => {
+          !emails.has(doc.email) ? emails.set(doc.email, doc.email) : null;
+        });
+        return Array.from(emails.values());
+      })
+    )
   }
 }

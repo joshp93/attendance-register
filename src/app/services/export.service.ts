@@ -1,9 +1,21 @@
 import { Injectable, ElementRef } from '@angular/core';
-import * as FileSaver from "file-saver";
-import * as xlsx from "xlsx";
+import { ExportToCsv } from "export-to-csv";
+import { Attendance } from '../models/Attendance.model';
+import { ExportAttendance } from '../models/export-attendance';
+import { IAttendance } from '../models/IAttendance.model';
 
-const excelExtension = ".xlsx";
-
+const options = {
+  fieldSeparator: ',',
+  quoteStrings: '',
+  decimalSeparator: '.',
+  showLabels: true,
+  showTitle: true,
+  title: 'Record of Attendace',
+  useTextFile: false,
+  useBom: true,
+  useKeysAsHeaders: true,
+  // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+};
 @Injectable({
   providedIn: 'root'
 })
@@ -11,12 +23,11 @@ export class ExportService {
 
   constructor() { }
 
-  exportTableElmToExcel(element: ElementRef, fileName: string): void {
-    const ws: xlsx.WorkSheet = xlsx.utils.table_to_sheet(element.nativeElement);
-    // generate workbook and add the worksheet
-    const workbook: xlsx.WorkBook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(workbook, ws, 'Sheet1');
-    // save to file
-    xlsx.writeFile(workbook, `${fileName}${excelExtension}`);
+  exportAttendanceToCsv(attendances: Attendance[]) {
+    let exportAttendance = new Array<ExportAttendance>();
+    attendances.forEach((attendance) => exportAttendance.push(new ExportAttendance(attendance)));
+    
+    let exportToCsv = new ExportToCsv(options);
+    exportToCsv.generateCsv(exportAttendance);
   }
 }

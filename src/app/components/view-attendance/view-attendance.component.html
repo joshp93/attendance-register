@@ -1,13 +1,15 @@
 <div class="contentWrapper">
     
     <form class="flexColumn" [formGroup]="inputForm">
-        <mat-form-field appearance="standard">
-            <mat-label>Email</mat-label>
-            <input matInput id="email" name="email" type="email" formControlName="email" (blur)="updateResults()">
-        </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>Email</mat-label>
+        <mat-select formControlName="email"  (selectionChange)="updateResults()">
+            <mat-option *ngFor="let e of emails" [value]="e">{{ e }}</mat-option>
+        </mat-select>
+    </mat-form-field>
     </form>
     
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" #attendanceTable>
+    <table mat-table [dataSource]="attendances" class="mat-elevation-z8">
         
         <ng-container matColumnDef="email">
             <th mat-header-cell *matHeaderCellDef> Email </th>
