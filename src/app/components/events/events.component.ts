@@ -34,4 +34,8 @@ export class EventsComponent implements OnInit {
   viewEvent(event) {
     this.router.navigateByUrl(this.router.url + "/add-event", { state: { id: event.path[0].id as string } });
   }
+
+  close() {
+    this.router.navigate(["home"]);
+  }
 }

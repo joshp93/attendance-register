@@ -10,7 +10,7 @@
             <input matInput id="password" name="password" type="password" formControlName="password" (blur)="checkValid()">
             <mat-error *ngIf="this.inputForm.get('password').invalid">{{ errors.get("password") }}</mat-error>
         </mat-form-field>
-        <div class="formButtons">
+        <div class="buttons">
             <button mat-raised-button color="warn" (click)="close()" type="button"
                 [disabled]="buttonDisabled">Close</button>
             <span></span>

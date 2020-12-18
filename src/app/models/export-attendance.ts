@@ -15,4 +15,3 @@ export class ExportAttendance {
         return this.email + ", " + this.event + ", " + this.date;
     }
 }
-

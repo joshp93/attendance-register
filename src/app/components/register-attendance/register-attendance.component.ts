@@ -97,5 +97,4 @@ export class RegisterAttendanceComponent implements OnInit {
     isLoading ? this.submitText = "..." : this.submitText = "Submit - ارائه دادن";
     this.loading = isLoading;
   }
-
 }

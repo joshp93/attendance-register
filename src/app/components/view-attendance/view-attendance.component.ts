@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Attendance } from 'src/app/models/Attendance.model';
 import { AttendanceService } from 'src/app/services/attendance-service.service';
@@ -20,7 +21,7 @@ export class ViewAttendanceComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
   }
 
-  constructor(private attendanceService: AttendanceService, private fb: FormBuilder, private exportService: ExportService) {
+  constructor(private attendanceService: AttendanceService, private fb: FormBuilder, private exportService: ExportService, private router: Router) {
     this.getAttenderEmails();
     this.getAttendance(null);
   }
@@ -45,5 +46,9 @@ export class ViewAttendanceComponent implements OnInit, AfterViewInit {
 
   exportDataToExcel() {
     this.exportService.exportAttendanceToCsv(this.attendances);
+  }
+
+  close() {
+    this.router.navigate(["home"]);
   }
 }
