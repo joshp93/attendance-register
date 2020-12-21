@@ -24,6 +24,7 @@
     "@angular/router": "~10.2.0",
     "export-to-csv": "^0.2.1",
     "firebase": "^8.1.1",
+    "ng-recaptcha": "^6.1.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

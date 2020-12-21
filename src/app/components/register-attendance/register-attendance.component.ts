@@ -3,11 +3,11 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 import { Attendance } from 'src/app/models/Attendance.model';
 import { ChurchEvent } from 'src/app/models/ChurchEvent.model';
 import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
 import { AttendanceService } from 'src/app/services/attendance-service.service';
+import { environment } from "../../../environments/environment";
 
 @Component({
   selector: 'app-register-attendance',
@@ -20,8 +20,11 @@ export class RegisterAttendanceComponent implements OnInit {
   buttonDisabled: boolean;
   loading: boolean;
   events: ChurchEvent[];
+  notARobot: boolean;
+  siteKey: string;
 
   constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private attendanceService: AttendanceService) {
+    this.siteKey = environment.siteKey;
     this.attendanceService.getEvents().subscribe((observer) => {
       this.events = observer;
     });
@@ -73,7 +76,7 @@ export class RegisterAttendanceComponent implements OnInit {
 
   submit() {
     this.setLoadingState(true);
-    if (this.inputForm.valid && this.inputForm.touched) {
+    if (this.inputForm.valid && this.inputForm.touched && this.notARobot) {
       let attendance = new Attendance(this.inputForm.value.email, this.inputForm.value.event, this.inputForm.value.date);
       this.attendanceService.setAttendance(attendance)
         .then(() => {
@@ -97,4 +100,14 @@ export class RegisterAttendanceComponent implements OnInit {
     isLoading ? this.submitText = "..." : this.submitText = "Submit - ارائه دادن";
     this.loading = isLoading;
   }
+
+  onRecaptchaError(errorDetails: any[]) {
+    console.log(`reCAPTCHA error encountered; details:`, errorDetails);
+  }
+
+  onRecaptchaResolved(captchaRespone) {
+    this.notARobot = true;
+  }
 }
+
+// TODO limit the allowed dates to only days on which the event is happening / happened

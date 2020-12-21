@@ -21,6 +21,9 @@
             <mat-error *ngIf="this.inputForm.get('date').invalid">{{ errors.get("date") }}</mat-error>
         </mat-form-field>
 
+        <re-captcha (resolved)="onRecaptchaResolved($event)" (error)="onRecaptchaError($event)" errorMode="handled"
+            siteKey="6LdkQA8aAAAAAM_sA_NY8rmJn_-UbKCQTxyBp4oR"></re-captcha>
+
         <div class="buttons">
             <button mat-raised-button color="warn" (click)="close()" type="button" [disabled]="buttonDisabled">Close -
                 بستن</button>
