@@ -17,6 +17,7 @@ export class ViewAttendanceComponent implements OnInit, AfterViewInit {
   attendances: Attendance[];
   emails: string[];
   inputForm: FormGroup;
+  deleteDisabled: boolean;
 
   ngAfterViewInit() {
   }
@@ -25,15 +26,21 @@ export class ViewAttendanceComponent implements OnInit, AfterViewInit {
     this.getAttenderEmails();
     this.getAttendance(null);
   }
-
+  
   ngOnInit(): void {
     this.inputForm = this.fb.group({
       email: new FormControl(''),
     });
+    this.deleteDisabled = true;
   }
 
   updateResults() {
     this.getAttendance(this.inputForm.value.email);
+    this.updateDeleteDisabled();
+  }
+
+  updateDeleteDisabled() {
+    this.deleteDisabled = this.inputForm.value.email ? false : true;
   }
 
   getAttendance(email?: string) {

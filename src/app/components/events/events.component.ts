@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from "@angular/fire/firestore";
 import { Router } from '@angular/router';
-import { Console } from 'console';
 import { Observable } from "rxjs";
 import { ChurchEvent } from 'src/app/models/ChurchEvent.model';
 import { AttendanceService } from 'src/app/services/attendance-service.service';
+import { ExportService } from 'src/app/services/export.service';
 
 
 @Component({
@@ -15,8 +14,9 @@ import { AttendanceService } from 'src/app/services/attendance-service.service';
 export class EventsComponent implements OnInit {
   displayedColumns: string[] = ['event', 'date'];
   dataSource: Observable<ChurchEvent[]>;
+  events: ChurchEvent[]
 
-  constructor(private router: Router, private attendanceService: AttendanceService) { 
+  constructor(private router: Router, private attendanceService: AttendanceService, private exportService: ExportService) { 
     this.getEvents();
   }
   
@@ -24,18 +24,24 @@ export class EventsComponent implements OnInit {
   }
 
   getEvents() {
-    this.dataSource = this.attendanceService.getEventsWithIds(); 
+    this.attendanceService.getEventsWithIds().subscribe((results) => {
+      this.events = results;
+    });
   }
 
-  addEvent() {
-    this.router.navigate([this.router.url + "/add-event"]);
+  Event() {
+    this.router.navigate([this.router.url + "/event"]);
   }
 
   viewEvent(event) {
-    this.router.navigateByUrl(this.router.url + "/add-event", { state: { id: event.path[0].id as string } });
+    this.router.navigateByUrl(this.router.url + "/event", { state: { id: event.path[0].id as string } });
   }
 
   close() {
     this.router.navigate(["home"]);
+  }
+
+  exportDataToExcel() {
+    this.exportService.exportEventsToCsv(this.events);
   }
 }

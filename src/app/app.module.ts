@@ -7,7 +7,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from "@angular/fire";
-import { AngularFireAuth, AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { environment } from 'src/environments/environment';
 import { HomeComponent } from './components/home/home.component';
@@ -15,7 +15,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { CustomValidationService } from './modules/custom-validation-service/custom-validation-service.module';
 import { UserSession } from './modules/user-session/user-session.module';
 import { EventsComponent } from './components/events/events.component';
-import { AddEventComponent } from './components/add-event/add-event.component';
+import { EventComponent } from './components/event/event.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,7 +37,7 @@ import { ViewAttendanceComponent } from './components/view-attendance/view-atten
     SignUpComponent,
     HomeComponent,
     NavbarComponent,
-    AddEventComponent,
+    EventComponent,
     EventsComponent,
     RegisterAttendanceComponent,
     ViewAttendanceComponent

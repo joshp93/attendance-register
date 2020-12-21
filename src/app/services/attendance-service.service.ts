@@ -135,4 +135,15 @@ export class AttendanceService {
       })
     )
   }
+
+  deleteEvent(eventId: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.firestore.collection("events").doc(eventId).delete()
+        .then(() => resolve(true))
+        .catch((reason) => {
+          console.error(reason);
+          reject(false);
+        });
+    });
+  }
 }

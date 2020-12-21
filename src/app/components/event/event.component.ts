@@ -1,33 +1,28 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
-import { UserSession } from 'src/app/modules/user-session/user-session.module';
-import { AngularFirestore, CollectionReference, DocumentReference } from "@angular/fire/firestore";
-import { Key } from 'protractor';
-import { relative } from 'path';
-import { Route } from '@angular/compiler/src/core';
 import { AttendanceService } from 'src/app/services/attendance-service.service';
 import { ChurchEvent } from 'src/app/models/ChurchEvent.model';
 
 @Component({
-  selector: 'app-add-event',
-  templateUrl: './add-event.component.html',
-  styleUrls: ['./add-event.component.scss']
+  selector: 'app-event',
+  templateUrl: './event.component.html',
+  styleUrls: ['./event.component.scss']
 })
-export class AddEventComponent implements OnInit {
+export class EventComponent implements OnInit {
   inputForm: FormGroup;
   required: string;
   submitText: string;
   buttonDisabled: boolean;
+  deleteDisabled: boolean;
   loading: boolean;
   private datePattern: RegExp;
   private selectedFile = null;
   errors: Map<string, string>;
   eventId: string;
 
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private attendaceService: AttendanceService) {
+  constructor(private fb: FormBuilder, private router: Router, private customValidation: CustomValidationService, private route: ActivatedRoute, private attendaceService: AttendanceService) {
     this.initInputForm();
     this.eventId = "";
     if (this.router.getCurrentNavigation().extras.state) {
@@ -39,6 +34,7 @@ export class AddEventComponent implements OnInit {
         })
       });
     }
+    this.deleteDisabled = this.eventId ? false : true;
   }
 
   ngOnInit(): void {
@@ -103,5 +99,22 @@ export class AddEventComponent implements OnInit {
 
   onFileSelected(event) {
     this.selectedFile = event.target.files.file[0];
+  }
+  getDeleteClasses() {
+    return { notDelete : this.eventId === "" };
+  }
+  
+  deleteEvent() {
+    if (!confirm(`Are you sure you wish to delete this event?\nDoing so will not delete the associated Attendance records, they must be deleted separately`)) {
+      return;
+    }
+    this.attendaceService.deleteEvent(this.eventId)
+      .then(() => {
+        this.inputForm.reset();
+        this.router.navigate(["home"]);
+      })
+      .catch(() => {
+        alert("There was a problem deleting the event.");
+      });
   }
 }

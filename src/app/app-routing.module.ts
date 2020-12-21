@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { AddEventComponent } from './components/add-event/add-event.component';
+import { EventComponent } from './components/event/event.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { LoginGuard } from './guards/login.guard';
@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'home/events', component: EventsComponent, canActivate: [LoginGuard] },
-  { path: 'home/events/add-event', component: AddEventComponent, canActivate: [LoginGuard] },
+  { path: 'home/events/event', component: EventComponent, canActivate: [LoginGuard] },
   { path: 'home/register-attendance', component: RegisterAttendanceComponent },
   { path: 'home/view-attendance', component: ViewAttendanceComponent, canActivate: [LoginGuard]},
   { path: '**', redirectTo: 'home' }

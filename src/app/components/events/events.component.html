@@ -1,8 +1,8 @@
 <div class="contentWrapper">
-  <button mat-mini-fab color="primary" matTooltip="Add Event" matTooltipPosition="above" routerLink="./add-event">
+  <button mat-mini-fab color="primary" matTooltip="Add Event" matTooltipPosition="above" routerLink="./event" class="addButton">
     <mat-icon>post_add</mat-icon>
   </button>
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <table mat-table [dataSource]="events" class="mat-elevation-z8">
 
     <ng-container matColumnDef="id" id="idCell">
       <th mat-header-cell *matHeaderCellDef> Id </th>
@@ -26,5 +26,7 @@
 
   <div class="buttons">
     <button mat-raised-button color="warn" (click)="close()" type="button">Close</button>
+    <span></span>
+    <button mat-raised-button color="primary" (click)="exportDataToExcel()">Export to CSV</button>
   </div>
 </div>
