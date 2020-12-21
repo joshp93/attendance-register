@@ -16,7 +16,8 @@ import { CustomValidationService } from './modules/custom-validation-service/cus
 import { UserSession } from './modules/user-session/user-session.module';
 import { EventsComponent } from './components/events/events.component';
 import { EventComponent } from './components/event/event.component';
-import { RecaptchaModule } from "ng-recaptcha";
+import { RecaptchaModule, RECAPTCHA_LANGUAGE } from "ng-recaptcha";
+import { RECAPTCHA_SETTINGS, RecaptchaSettings } from "ng-recaptcha";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -64,7 +65,15 @@ import { ViewAttendanceComponent } from './components/view-attendance/view-atten
   ],
   providers: [
     CustomValidationService,
-    UserSession
+    UserSession,
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: { siteKey: environment.siteKey } as RecaptchaSettings
+    },
+    {
+      provide: RECAPTCHA_LANGUAGE,
+      useValue: environment.langauge
+    }
   ],
   bootstrap: [AppComponent]
 })

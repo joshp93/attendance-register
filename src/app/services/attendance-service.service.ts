@@ -108,6 +108,18 @@ export class AttendanceService {
     return eventsCol.valueChanges();
   }
 
+  getAvailableDatesForEvent(event: string): string[] {
+    let eventsCol: AngularFirestoreCollection<ChurchEvent> = this.firestore.collection("events", ref => ref.where("name", "==", event));
+    let availableDates = new Array<string>();
+
+    eventsCol.valueChanges().forEach((churchEvents) => {
+      churchEvents.forEach((churchEvent) => {
+        availableDates.push(churchEvent.date.toDate().toDateString());
+      })
+    });
+    return availableDates;
+  }
+
   getAttendance(email: string | null): Observable<Attendance[]> {
     let attendanceCol: AngularFirestoreCollection<Attendance> = (email ? this.firestore.collection("attendances", ref => ref.where('email', '==', email)) : this.firestore.collection("attendances"));
     return attendanceCol.get().pipe(

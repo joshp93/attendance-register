@@ -23,6 +23,11 @@ export class RegisterAttendanceComponent implements OnInit {
   notARobot: boolean;
   siteKey: string;
 
+  dateFilter = (d: Date | null): boolean => {
+    const date = (d || new Date());
+    return date == new Date();
+  }
+
   constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private attendanceService: AttendanceService) {
     this.siteKey = environment.siteKey;
     this.attendanceService.getEvents().subscribe((observer) => {
