@@ -16,14 +16,14 @@ input:focus {
 }
 .contentWrapper {
     width: 80%;
-    margin-left: 10%;
+    margin: auto;
 }
 .contentWrapper form {
-    padding: 5px;
+    padding: 0.5em;
     background-color: rgba(211, 211, 211, 0.9);
     border-radius: 5px;
-    margin-bottom: 20px;
-    margin-top: 10px;
+    margin-bottom: 1em;
+    margin-top: 1em;
 }
 .flexColumn {
     display: flex;
@@ -39,7 +39,7 @@ input:focus {
     align-self: flex-end;
 }
 .buttons {
-    margin-top: 10px;
+    margin-top: 1em;
     display: flex;
     flex-direction: row;
 }
@@ -48,8 +48,7 @@ input:focus {
 }
 table {
     width: 100%;
-    margin: auto;
-    margin-top: 10px;
+    margin-top: 1em;
 }
 $trColour: whitesmoke;
 tr {
@@ -59,7 +58,5 @@ tr:nth-child(odd) {
     background-color: darken($color: $trColour, $amount: 10);
 }
 .deleteButton {
-    width: 40px;
-    height: 40px;
     align-self: flex-end;
 }

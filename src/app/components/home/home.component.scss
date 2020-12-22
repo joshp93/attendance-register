@@ -1,6 +1,7 @@
 button {
-    width: auto;
-    height: 150px;
-    font-size: large;
-    margin: 10px
+    min-width: 11em;
+    max-width: 20em;
+    height: 5em;
+    font-size: x-large;
+    margin: 0.5em;
 }
