@@ -21,22 +21,10 @@ export class RegisterAttendanceComponent implements OnInit {
   loading: boolean;
   events: ChurchEvent[];
   notARobot: boolean;
-  siteKey: string;
-
-  dateFilter = (d: Date | null): boolean => {
-    const date = (d || new Date());
-    return date == new Date();
-  }
-
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private attendanceService: AttendanceService) {
-    this.siteKey = environment.siteKey;
-    this.attendanceService.getEvents().subscribe((observer) => {
-      this.events = observer;
-    });
-  }
-
   private datePattern: RegExp;
   errors: Map<string, string>;
+
+  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private attendanceService: AttendanceService) {}
 
   ngOnInit(): void {
     this.setLoadingState(false);
@@ -47,6 +35,7 @@ export class RegisterAttendanceComponent implements OnInit {
       date: new FormControl(new Date(), [Validators.required])
     });
     this.initErrors();
+    this.updateEvents();
   }
 
   initErrors() {
@@ -72,6 +61,17 @@ export class RegisterAttendanceComponent implements OnInit {
         i = "";
       });
     }
+  }
+
+  checkValidAndUpdateEvents() {
+    this.checkValid();
+    this.updateEvents();
+  }
+
+  updateEvents() {
+    this.attendanceService.getEventsOnDate(this.inputForm.value.date).subscribe((observer) => {
+      this.events = observer;
+    });
   }
 
   close() {

@@ -1,21 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Observable } from "rxjs";
 import { ChurchEvent } from 'src/app/models/ChurchEvent.model';
 import { AttendanceService } from 'src/app/services/attendance-service.service';
 import { ExportService } from 'src/app/services/export.service';
-
 
 @Component({
   selector: 'app-registers',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss']
 })
-export class EventsComponent implements OnInit {
+export class EventsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['event', 'date'];
-  dataSource: Observable<ChurchEvent[]>;
-  events: ChurchEvent[]
+  events = new MatTableDataSource<ChurchEvent>();
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  ngAfterViewInit() {
+    this.events.paginator = this.paginator;
+    this.events.sort = this.sort;
+  }
   constructor(private router: Router, private attendanceService: AttendanceService, private exportService: ExportService) { 
     this.getEvents();
   }
@@ -25,7 +32,7 @@ export class EventsComponent implements OnInit {
 
   getEvents() {
     this.attendanceService.getEventsWithIds().subscribe((results) => {
-      this.events = results;
+      this.events.data = results;
     });
   }
 
@@ -42,6 +49,6 @@ export class EventsComponent implements OnInit {
   }
 
   exportDataToExcel() {
-    this.exportService.exportEventsToCsv(this.events);
+    this.exportService.exportEventsToCsv(this.events.data);
   }
 }

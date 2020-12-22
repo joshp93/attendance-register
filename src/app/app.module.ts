@@ -16,6 +16,7 @@ import { CustomValidationService } from './modules/custom-validation-service/cus
 import { UserSession } from './modules/user-session/user-session.module';
 import { EventsComponent } from './components/events/events.component';
 import { EventComponent } from './components/event/event.component';
+import { ViewAttendanceComponent } from './components/view-attendance/view-attendance.component';
 import { RecaptchaModule, RECAPTCHA_LANGUAGE } from "ng-recaptcha";
 import { RECAPTCHA_SETTINGS, RecaptchaSettings } from "ng-recaptcha";
 
@@ -30,7 +31,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { RegisterAttendanceComponent } from './components/register-attendance/register-attendance.component';
 import { MatSelectModule } from "@angular/material/select";
-import { ViewAttendanceComponent } from './components/view-attendance/view-attendance.component';
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { ViewAttendanceComponent } from './components/view-attendance/view-atten
     MatIconModule,
     MatTableModule,
     MatSelectModule,
+    MatPaginatorModule,
+    MatSortModule,
     RecaptchaModule
   ],
   providers: [

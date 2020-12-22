@@ -7,7 +7,7 @@
         <form class="flexColumn" [formGroup]="inputForm">
             <mat-form-field appearance="standard">
                 <mat-label>Event</mat-label>
-                <input matInput name="event" type="text" formControlName="event" (blur)="checkValid()">
+                <input matInput name="event" type="text" formControlName="event" (dateInput)="checkValid()" (dateChange)="checkValid()">
                 <mat-error *ngIf="this.inputForm.get('event').invalid">{{ errors.get("event") }}</mat-error>
             </mat-form-field>
             <mat-form-field appearance="standard">

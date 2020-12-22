@@ -1,7 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { Attendance } from 'src/app/models/Attendance.model';
 import { AttendanceService } from 'src/app/services/attendance-service.service';
 import { ExportService } from 'src/app/services/export.service';
@@ -13,13 +15,17 @@ import { ExportService } from 'src/app/services/export.service';
 })
 export class ViewAttendanceComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['email', 'event', 'date'];
-  dataSource: Observable<Attendance[]>;
-  attendances: Attendance[];
+  attendances = new MatTableDataSource<Attendance>();
   emails: string[];
   inputForm: FormGroup;
   deleteDisabled: boolean;
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   ngAfterViewInit() {
+    this.attendances.paginator = this.paginator;
+    this.attendances.sort = this.sort;
   }
 
   constructor(private attendanceService: AttendanceService, private fb: FormBuilder, private exportService: ExportService, private router: Router) {
@@ -44,7 +50,7 @@ export class ViewAttendanceComponent implements OnInit, AfterViewInit {
   }
 
   getAttendance(email?: string) {
-    this.attendanceService.getAttendance(email).subscribe((results) => this.attendances = results);
+    this.attendanceService.getAttendance(email).subscribe((results) => this.attendances.data = results);
   }
 
   getAttenderEmails() {
@@ -52,7 +58,7 @@ export class ViewAttendanceComponent implements OnInit, AfterViewInit {
   }
 
   exportDataToExcel() {
-    this.exportService.exportAttendanceToCsv(this.attendances);
+    this.exportService.exportAttendanceToCsv(this.attendances.data);
   }
 
   close() {

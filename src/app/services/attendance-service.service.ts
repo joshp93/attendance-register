@@ -108,6 +108,18 @@ export class AttendanceService {
     return eventsCol.valueChanges();
   }
 
+  getEventsOnDate(date: Date): Observable<ChurchEvent[]> {
+    let startDate = new Date(date.toDateString());
+    let endDate = date;
+    endDate.setHours(23, 59, 59, 999);
+    let eventsCol: AngularFirestoreCollection<ChurchEvent> = this.firestore.collection("events", ref => ref
+      .where("date", ">=", startDate)
+      .where("date", "<=", endDate)
+    );
+
+    return eventsCol.valueChanges();
+  }
+
   getAvailableDatesForEvent(event: string): string[] {
     let eventsCol: AngularFirestoreCollection<ChurchEvent> = this.firestore.collection("events", ref => ref.where("name", "==", event));
     let availableDates = new Array<string>();

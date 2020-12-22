@@ -48,7 +48,7 @@ input:focus {
     margin: auto;
 }
 table {
-    max-width: 100%;
+    width: 100%;
     margin-top: 1em;
 }
 $trColour: whitesmoke;
@@ -60,4 +60,7 @@ tr:nth-child(odd) {
 }
 .deleteButton {
     align-self: flex-end;
+}
+mat-paginator {
+    margin-top: 1em;
 }

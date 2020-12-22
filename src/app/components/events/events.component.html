@@ -2,20 +2,21 @@
   <button mat-mini-fab color="primary" matTooltip="Add Event" matTooltipPosition="above" routerLink="./event" class="addButton">
     <mat-icon>post_add</mat-icon>
   </button>
-  <table mat-table [dataSource]="events" class="mat-elevation-z8">
+  <div class="mat-elevation-z8">
+  <table mat-table [dataSource]="events" matSort>
 
     <ng-container matColumnDef="id" id="idCell">
-      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
       <td mat-cell *matCellDef="let churchEvent"> {{ churchEvent.id }} </td>
     </ng-container>
 
     <ng-container matColumnDef="event">
-      <th mat-header-cell *matHeaderCellDef> Event </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Event </th>
       <td mat-cell *matCellDef="let churchEvent" id="{{ churchEvent.id }}"> {{ churchEvent.name }} </td>
     </ng-container>
 
     <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
       <td mat-cell *matCellDef="let churchEvent" id="{{ churchEvent.id }}"> {{ churchEvent.date.toDate().toDateString()
         }} </td>
     </ng-container>
@@ -23,6 +24,8 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewEvent($event)"></tr>
   </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20, 100]" showFirstLastButtons></mat-paginator>
+</div>
 
   <div class="buttons">
     <button mat-raised-button color="warn" (click)="close()" type="button">Close</button>
