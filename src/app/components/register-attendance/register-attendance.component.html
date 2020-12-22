@@ -15,13 +15,15 @@
 
         <mat-form-field appearance="standard">
             <mat-label>Date - تاریخ</mat-label>
-            <input matInput name="date" [matDatepicker]="picker" formControlName="date" (blur)="checkValid()" [matDatepickerFilter]="dateFilter">
+            <input matInput name="date" [matDatepicker]="picker" formControlName="date" (blur)="checkValid()"
+                [matDatepickerFilter]="dateFilter">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="this.inputForm.get('date').invalid">{{ errors.get("date") }}</mat-error>
         </mat-form-field>
 
-        <re-captcha (resolved)="onRecaptchaResolved($event)" (error)="onRecaptchaError($event)" errorMode="handled"></re-captcha>
+        <re-captcha (resolved)="onRecaptchaResolved($event)" (error)="onRecaptchaError($event)" errorMode="handled"
+            style="transform:scale(0.77); -webkit-transform:scale(0.77); transform-origin:0 0; -webkit-transform-origin:0 0;"></re-captcha>
 
         <div class="buttons">
             <button mat-raised-button color="warn" (click)="close()" type="button" [disabled]="buttonDisabled">Close -
