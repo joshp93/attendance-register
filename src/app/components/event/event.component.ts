@@ -17,10 +17,11 @@ export class EventComponent implements OnInit {
   buttonDisabled: boolean;
   deleteDisabled: boolean;
   loading: boolean;
-  private datePattern: RegExp;
-  private selectedFile = null;
   errors: Map<string, string>;
   eventId: string;
+  isRecurring: boolean;
+  recurranceTypes: string[] = ["Daily", "Weekly", "Monthly"];
+  selRecurranceType: string;
 
   constructor(private fb: FormBuilder, private router: Router, private customValidation: CustomValidationService, private route: ActivatedRoute, private attendaceService: AttendanceService) {
     this.initInputForm();
@@ -42,10 +43,11 @@ export class EventComponent implements OnInit {
 
   initInputForm() {
     this.setLoadingState(false);
-    this.datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
     this.inputForm = this.fb.group({
       event: new FormControl("", Validators.required),
-      date: new FormControl(new Date(), [Validators.required])
+      date: new FormControl(new Date(), [Validators.required]),
+      recurring: new FormControl(false),
+      recurranceType: new FormControl("Weekly")
     });
     this.initErrors();
   }
@@ -54,6 +56,8 @@ export class EventComponent implements OnInit {
     this.errors = new Map<string, string>();
     this.errors.set("event", "");
     this.errors.set("date", "");
+    this.errors.set("recurring", "");
+    this.errors.set("recurranceType", "");
   }
 
   checkValid() {
@@ -97,9 +101,9 @@ export class EventComponent implements OnInit {
     this.loading = isLoading;
   }
 
-  onFileSelected(event) {
-    this.selectedFile = event.target.files.file[0];
-  }
+  // onFileSelected(event) {
+  //   this.selectedFile = event.target.files.file[0];
+  // }
   getDeleteClasses() {
     return { notDelete : this.eventId === "" };
   }
@@ -116,5 +120,9 @@ export class EventComponent implements OnInit {
       .catch(() => {
         alert("There was a problem deleting the event.");
       });
+  }
+
+  toggleRecurrance(checked: boolean) {
+    this.isRecurring = checked;
   }
 }

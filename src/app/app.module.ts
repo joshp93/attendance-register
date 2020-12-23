@@ -33,6 +33,8 @@ import { RegisterAttendanceComponent } from './components/register-attendance/re
 import { MatSelectModule } from "@angular/material/select";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from '@angular/material/sort';
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatRadioModule } from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -65,6 +67,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatSelectModule,
     MatPaginatorModule,
     MatSortModule,
+    MatCheckboxModule,
+    MatRadioModule,
     RecaptchaModule
   ],
   providers: [

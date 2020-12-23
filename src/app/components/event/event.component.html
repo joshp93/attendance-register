@@ -7,7 +7,8 @@
         <form class="flexColumn" [formGroup]="inputForm">
             <mat-form-field appearance="standard">
                 <mat-label>Event</mat-label>
-                <input matInput name="event" type="text" formControlName="event" (dateInput)="checkValid()" (dateChange)="checkValid()">
+                <input matInput name="event" type="text" formControlName="event" (dateInput)="checkValid()"
+                    (dateChange)="checkValid()">
                 <mat-error *ngIf="this.inputForm.get('event').invalid">{{ errors.get("event") }}</mat-error>
             </mat-form-field>
             <mat-form-field appearance="standard">
@@ -17,7 +18,16 @@
                 <mat-datepicker #picker></mat-datepicker>
                 <mat-error *ngIf="this.inputForm.get('date').invalid">{{ errors.get("date") }}</mat-error>
             </mat-form-field>
-            <!-- <input name="picture" type="file" formControlName="picture" (change)="onFileSelected($event)"> -->
+
+            <mat-checkbox color="primary" appearance="standard" (change)="toggleRecurrance($event.checked)"
+                formControlName="recurring" name="recurring">Recurring</mat-checkbox>
+            <mat-radio-group formControlName="recurranceType" [disabled]="!isRecurring">
+                <mat-radio-button *ngFor="let recurranceType of recurranceTypes" [value]="recurranceType" name="recurranceType">
+                    {{ recurranceType }}
+                </mat-radio-button>
+            </mat-radio-group>
+            <!-- TODO Add this to the Church Event, Batch create 1 year's worth of events -->
+
             <div class="buttons">
                 <button mat-raised-button color="warn" (click)="close()" type="button"
                     [disabled]="buttonDisabled">Close</button>
