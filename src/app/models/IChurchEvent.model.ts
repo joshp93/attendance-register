@@ -3,4 +3,6 @@ export interface IChurchEvent {
     id: string;
     name: string;
     date: firebase.firestore.Timestamp;
+    recurring: boolean;
+    recurranceType: string;
 }

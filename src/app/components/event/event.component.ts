@@ -19,7 +19,6 @@ export class EventComponent implements OnInit {
   loading: boolean;
   errors: Map<string, string>;
   eventId: string;
-  isRecurring: boolean;
   recurranceTypes: string[] = ["Daily", "Weekly", "Monthly"];
   selRecurranceType: string;
 
@@ -31,8 +30,11 @@ export class EventComponent implements OnInit {
       this.attendaceService.getEvent(this.eventId).subscribe((val) => {
         this.inputForm.setValue({
           event: val.name,
-          date: val.date.toDate()
-        })
+          date: val.date.toDate(),
+          recurring: val.recurring,
+          recurranceType: val.recurranceType
+        });
+        this.toggleRecurrance(val.recurring);
       });
     }
     this.deleteDisabled = this.eventId ? false : true;
@@ -47,7 +49,11 @@ export class EventComponent implements OnInit {
       event: new FormControl("", Validators.required),
       date: new FormControl(new Date(), [Validators.required]),
       recurring: new FormControl(false),
-      recurranceType: new FormControl("Weekly")
+      recurranceType: new FormControl(
+        {
+          value: "Weekly",
+          disabled: true
+        })
     });
     this.initErrors();
   }
@@ -83,12 +89,12 @@ export class EventComponent implements OnInit {
   submit() {
     this.setLoadingState(true);
     if (this.inputForm.valid && this.inputForm.touched) {
-      this.attendaceService.setEvent(new ChurchEvent(this.eventId, this.inputForm.value.event, this.inputForm.value.date))
+      this.attendaceService.setEvent(new ChurchEvent(this.eventId, this.inputForm.value.event, this.inputForm.value.date, this.inputForm.value.recurring, this.inputForm.value.recurranceType))
         .catch((reason) => console.log(reason))
         .finally(() => {
           this.setLoadingState(false);
           this.inputForm.reset();
-          this.router.navigate(["home/events"]);
+          this.router.navigate(["../"], { relativeTo: this.route });
         });
     } else {
       this.setLoadingState(false);
@@ -115,7 +121,7 @@ export class EventComponent implements OnInit {
     this.attendaceService.deleteEvent(this.eventId)
       .then(() => {
         this.inputForm.reset();
-        this.router.navigate(["home"]);
+        this.router.navigate(["../"], { relativeTo: this.route });
       })
       .catch(() => {
         alert("There was a problem deleting the event.");
@@ -123,6 +129,6 @@ export class EventComponent implements OnInit {
   }
 
   toggleRecurrance(checked: boolean) {
-    this.isRecurring = checked;
+    checked ? this.inputForm.get("recurranceType").enable() : this.inputForm.get("recurranceType").disable();
   }
 }

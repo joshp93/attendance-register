@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentReference } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, Observable, of, Subject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { switchMap, map } from "rxjs/operators";
 import { User } from '../models/user.model';
 import { ChurchEvent } from '../models/ChurchEvent.model';
 import { Attendance } from '../models/Attendance.model';
 import { IAttendance } from '../models/IAttendance.model';
-import firebase from 'firebase/app';
+import firebase from "firebase/app";
+import { IChurchEvent } from '../models/IChurchEvent.model';
 
 @Injectable({
   providedIn: 'root'
@@ -60,7 +61,7 @@ export class AttendanceService {
     return eventsCol.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
-          let churchEvent = new ChurchEvent(a.payload.doc.id, a.payload.doc.data().name, a.payload.doc.data().date.toDate())
+          let churchEvent = new ChurchEvent(a.payload.doc.id, a.payload.doc.data().name, a.payload.doc.data().date.toDate(), a.payload.doc.data().recurring, a.payload.doc.data().recurranceType);
           return churchEvent;
         });
       })
@@ -72,19 +73,80 @@ export class AttendanceService {
 
     return eventsCol.doc(eventId).get().pipe(
       map(doc => {
-        return new ChurchEvent(doc.id, doc.data().name, doc.data().date.toDate());
+        return new ChurchEvent(doc.id, doc.data().name, doc.data().date.toDate(), doc.data().recurring, doc.data().recurranceType);
       })
     );
   }
 
   setEvent(churchEvent: ChurchEvent) {
+    if (churchEvent.recurring) {
+      return this.setRecurringEvent(churchEvent);
+    }
     if (!churchEvent.id) {
       churchEvent.id = this.firestore.createId();
     }
     return this.firestore.collection("events").doc(churchEvent.id).set(Object.assign({}, churchEvent), { merge: true });
   }
 
-  // TODO - Get attendance
+  private setRecurringEvent(churchEvent: ChurchEvent) {
+    let eventCol: AngularFirestoreCollection<ChurchEvent> = this.firestore.collection("events");
+    let batch = this.firestore.firestore.batch();
+    let churchEvents = new Array<ChurchEvent>();
+
+    let recurringEventId = this.firestore.createId();
+    switch (churchEvent.recurranceType) {
+      case "Daily": {
+        for (let i = 1; i < 366; i++) {
+          let ce = new ChurchEvent(recurringEventId, churchEvent.name, this.makeDateRecurringEventDate(churchEvent.date.toDate(), i), churchEvent.recurring, churchEvent.recurranceType);
+          churchEvents.push(ce);
+          this.addToBatch(batch, ce);
+        }
+        break;
+      } case "Weekly": {
+        for (let i = 1; i < 53; i++) {
+          let ce = new ChurchEvent(recurringEventId, churchEvent.name, this.makeDateRecurringEventDate(churchEvent.date.toDate(), 0, i), churchEvent.recurring, churchEvent.recurranceType);
+          churchEvents.push(ce);
+
+          this.addToBatch(batch, ce);
+        }
+        break;
+      } case "Monthly": {
+        for (let i = 1; i < 13; i++) {
+          let ce = new ChurchEvent(recurringEventId, churchEvent.name, this.makeDateRecurringEventDate(churchEvent.date.toDate(), 0, 0, i), churchEvent.recurring, churchEvent.recurranceType);
+          churchEvents.push(ce);
+          this.addToBatch(batch, ce);
+        }
+        break;
+      }
+    }
+    return batch.commit();
+  }
+
+  private makeDateRecurringEventDate(originalEventDate: Date, addDays?: number, addWeeks?: number, addMonths?: number) {
+    if (addWeeks != 0) {
+      let addTime = originalEventDate;
+      addTime.setDate((originalEventDate.getDate() + addWeeks * 7));
+      return new Date(addTime);
+    } else {
+      return new Date(originalEventDate.getFullYear(), originalEventDate.getMonth() + addMonths,
+        originalEventDate.getDate() + addDays, originalEventDate.getHours(),
+        originalEventDate.getMinutes(), originalEventDate.getSeconds());
+    }
+  }
+
+  private addToBatch(batch: firebase.firestore.WriteBatch, churchEvent: ChurchEvent) {
+    let eventDoc: AngularFirestoreDocument<IChurchEvent> = this.firestore.collection("events").doc(this.firestore.createId());
+    let eventRef: DocumentReference<IChurchEvent> = eventDoc.ref;
+
+    batch.set(eventRef, {
+      id: churchEvent.id,
+      name: churchEvent.name,
+      date: churchEvent.date,
+      recurring: churchEvent.recurring,
+      recurranceType: churchEvent.recurranceType
+    });
+  }
+
   setAttendance(attendance: Attendance): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
 

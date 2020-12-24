@@ -21,12 +21,11 @@
 
             <mat-checkbox color="primary" appearance="standard" (change)="toggleRecurrance($event.checked)"
                 formControlName="recurring" name="recurring">Recurring</mat-checkbox>
-            <mat-radio-group formControlName="recurranceType" [disabled]="!isRecurring">
+            <mat-radio-group formControlName="recurranceType">
                 <mat-radio-button *ngFor="let recurranceType of recurranceTypes" [value]="recurranceType" name="recurranceType">
                     {{ recurranceType }}
                 </mat-radio-button>
             </mat-radio-group>
-            <!-- TODO Add this to the Church Event, Batch create 1 year's worth of events -->
 
             <div class="buttons">
                 <button mat-raised-button color="warn" (click)="close()" type="button"
