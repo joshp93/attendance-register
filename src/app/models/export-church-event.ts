@@ -1,6 +1,6 @@
 import { ChurchEvent } from './ChurchEvent.model';
 export class ExportChurchEvent {
-    id: string;
+    eventId: string;
     name: string;
     date: string;
 
@@ -10,6 +10,6 @@ export class ExportChurchEvent {
     }
 
     toString() {
-        return this.id + ", " + this.name + ", " + this.date;
+        return this.eventId + ", " + this.name + ", " + this.date;
     }
 }

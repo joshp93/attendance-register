@@ -41,7 +41,7 @@ export class EventsComponent implements OnInit, AfterViewInit {
   }
 
   viewEvent(event) {
-    this.router.navigateByUrl(this.router.url + "/event", { state: { id: event.path[0].id as string } });
+    this.router.navigateByUrl(this.router.url + "/event", { state: { docId: event.path[0].id as string } });
   }
 
   close() {

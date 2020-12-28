@@ -3,11 +3,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
 import { Attendance } from 'src/app/models/Attendance.model';
 import { ChurchEvent } from 'src/app/models/ChurchEvent.model';
-import { CustomValidationService } from 'src/app/modules/custom-validation-service/custom-validation-service.module';
 import { AttendanceService } from 'src/app/services/attendance-service.service';
-import { environment } from "../../../environments/environment";
 
 @Component({
   selector: 'app-register-attendance',
@@ -21,18 +20,16 @@ export class RegisterAttendanceComponent implements OnInit {
   loading: boolean;
   events: ChurchEvent[];
   notARobot: boolean;
-  private datePattern: RegExp;
   errors: Map<string, string>;
 
-  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private customValidation: CustomValidationService, private firestore: AngularFirestore, private route: ActivatedRoute, private attendanceService: AttendanceService) {}
+  constructor(private fb: FormBuilder, public auth: AngularFireAuth, private router: Router, private firestore: AngularFirestore, private route: ActivatedRoute, private attendanceService: AttendanceService) {}
 
   ngOnInit(): void {
     this.setLoadingState(false);
-    this.datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
     this.inputForm = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
       event: new FormControl('', [Validators.required]),
-      date: new FormControl(new Date(), [Validators.required])
+      date: new FormControl(moment(), [Validators.required])
     });
     this.initErrors();
     this.updateEvents();
@@ -69,7 +66,7 @@ export class RegisterAttendanceComponent implements OnInit {
   }
 
   updateEvents() {
-    this.attendanceService.getEventsOnDate(this.inputForm.value.date).subscribe((observer) => {
+    this.attendanceService.getEventsOnDate(moment(this.inputForm.value.date).toDate()).subscribe((observer) => {
       this.events = observer;
     });
   }
@@ -82,7 +79,7 @@ export class RegisterAttendanceComponent implements OnInit {
   submit() {
     this.setLoadingState(true);
     if (this.inputForm.valid && this.inputForm.touched && this.notARobot) {
-      let attendance = new Attendance(this.inputForm.value.email, this.inputForm.value.event, this.inputForm.value.date);
+      let attendance = new Attendance(this.inputForm.value.email, this.inputForm.value.event, moment(this.inputForm.value.date).toDate());
       this.attendanceService.setAttendance(attendance)
         .then(() => {
           alert(`You are registered for ${attendance.event}!\nشما ثبت نام کرده اید! ${attendance.event}`);

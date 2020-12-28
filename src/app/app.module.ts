@@ -12,11 +12,11 @@ import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { environment } from 'src/environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { CustomValidationService } from './modules/custom-validation-service/custom-validation-service.module';
 import { UserSession } from './modules/user-session/user-session.module';
 import { EventsComponent } from './components/events/events.component';
 import { EventComponent } from './components/event/event.component';
 import { ViewAttendanceComponent } from './components/view-attendance/view-attendance.component';
+import { YesNoDialogComponent } from './components/yes-no-dialog/yes-no-dialog.component';
 import { RecaptchaModule, RECAPTCHA_LANGUAGE } from "ng-recaptcha";
 import { RECAPTCHA_SETTINGS, RecaptchaSettings } from "ng-recaptcha";
 
@@ -25,7 +25,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
@@ -35,6 +36,8 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRadioModule } from "@angular/material/radio";
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [
@@ -46,7 +49,11 @@ import { MatRadioModule } from "@angular/material/radio";
     EventComponent,
     EventsComponent,
     RegisterAttendanceComponent,
-    ViewAttendanceComponent
+    ViewAttendanceComponent,
+    YesNoDialogComponent
+  ],
+  entryComponents: [
+    YesNoDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +67,7 @@ import { MatRadioModule } from "@angular/material/radio";
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule,
+    MatMomentDateModule,
     MatTooltipModule,
     MatIconModule,
     MatTableModule,
@@ -69,19 +76,18 @@ import { MatRadioModule } from "@angular/material/radio";
     MatSortModule,
     MatCheckboxModule,
     MatRadioModule,
+    MatDialogModule,
     RecaptchaModule
   ],
   providers: [
-    CustomValidationService,
     UserSession,
-    {
-      provide: RECAPTCHA_SETTINGS,
-      useValue: { siteKey: environment.siteKey } as RecaptchaSettings
-    },
-    {
-      provide: RECAPTCHA_LANGUAGE,
-      useValue: environment.langauge
-    }
+    { provide: MatDialogRef, useValue: [] },
+    { provide: MAT_DIALOG_DATA, useValue: [] },
+    { provide: RECAPTCHA_SETTINGS, useValue: { siteKey: environment.siteKey } as RecaptchaSettings },
+    { provide: RECAPTCHA_LANGUAGE, useValue: environment.langauge },
+    { provide: MAT_DATE_LOCALE, useValue: environment.langauge },
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
   ],
   bootstrap: [AppComponent]
 })

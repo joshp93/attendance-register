@@ -7,24 +7,24 @@
 
     <ng-container matColumnDef="id" id="idCell">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-      <td mat-cell *matCellDef="let churchEvent"> {{ churchEvent.id }} </td>
+      <td mat-cell *matCellDef="let churchEvent"> {{ churchEvent.docId }} </td>
     </ng-container>
 
     <ng-container matColumnDef="event">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Event </th>
-      <td mat-cell *matCellDef="let churchEvent" id="{{ churchEvent.id }}"> {{ churchEvent.name }} </td>
+      <td mat-cell *matCellDef="let churchEvent" id="{{ churchEvent.docId }}"> {{ churchEvent.name }} </td>
     </ng-container>
 
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
-      <td mat-cell *matCellDef="let churchEvent" id="{{ churchEvent.id }}"> {{ churchEvent.date.toDate().toDateString()
+      <td mat-cell *matCellDef="let churchEvent" id="{{ churchEvent.docId }}"> {{ churchEvent.date.toDate().toDateString()
         }} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="viewEvent($event)"></tr>
   </table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 100]" showFirstLastButtons></mat-paginator>
+  <mat-paginator [pageSizeOptions]="[10, 20, 100]" showFirstLastButtons></mat-paginator>
 </div>
 
   <div class="buttons">
