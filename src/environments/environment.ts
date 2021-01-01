@@ -15,7 +15,7 @@ export const environment = {
     measurementId: "G-061K80BB63"
   },
   siteKey: "6LdkQA8aAAAAAM_sA_NY8rmJn_-UbKCQTxyBp4oR",
-  langauge: "en-GB"
+  locale: "en-GB"
 };
 
 /*

@@ -41,7 +41,7 @@ export class EventComponent implements OnInit {
         this.event = val;
         this.inputForm.setValue({
           event: val.name,
-          date: moment(val.date),
+          date: moment(val.date.toDate()),
           recurring: val.recurring,
           recurranceType: val.recurranceType
         });

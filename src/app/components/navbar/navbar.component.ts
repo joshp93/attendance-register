@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import firebase from "firebase/app";
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import { logging } from 'protractor';
 import { UserSession } from 'src/app/modules/user-session/user-session.module';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   loggedIn: boolean;
   user$: Observable<firebase.User>;
 
-  constructor(private auth: AngularFireAuth, private router: Router, private userSession: UserSession) {
+  constructor(private auth: AngularFireAuth, private router: Router, private userSession: UserSession, private adapter: DateAdapter<any>) {
     this.user$ = auth.authState;
   }
 
@@ -32,5 +32,9 @@ export class NavbarComponent implements OnInit {
 
   goHome() {
     this.router.navigate(["home"]);
+  }
+
+  setLocale(event) {
+    this.adapter.setLocale(event.target.id);
   }
 }

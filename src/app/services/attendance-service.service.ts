@@ -10,7 +10,6 @@ import { Attendance } from '../models/Attendance.model';
 import { IAttendance } from '../models/IAttendance.model';
 import firebase from "firebase/app";
 import { IChurchEvent } from '../models/IChurchEvent.model';
-import { start } from 'repl';
 
 @Injectable({
   providedIn: 'root'

@@ -11,7 +11,7 @@ import { AttendanceService } from 'src/app/services/attendance-service.service';
 @Component({
   selector: 'app-register-attendance',
   templateUrl: './register-attendance.component.html',
-  styleUrls: ['./register-attendance.component.scss']
+  styleUrls: ['./register-attendance.component.scss'],
 })
 export class RegisterAttendanceComponent implements OnInit {
   inputForm: FormGroup;
@@ -111,5 +111,3 @@ export class RegisterAttendanceComponent implements OnInit {
     this.notARobot = true;
   }
 }
-
-// TODO limit the allowed dates to only days on which the event is happening / happened
